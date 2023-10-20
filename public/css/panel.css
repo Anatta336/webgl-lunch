@@ -1,0 +1,53 @@
+.panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    width: 100%;
+    max-width: 500px;
+}
+
+.input-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.input-buttons > div {
+    width: 80px;
+    height: 80px;
+    background-color: #99a5cc;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.output-lights {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.output-lights > div {
+    width: 80px;
+    height: 80px;
+    background-color: #404248;
+
+    width: 80px;
+    height: 80px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.output-lights > div.on {
+    background-color: #ee34bc;
+}

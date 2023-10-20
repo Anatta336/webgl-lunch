@@ -1,0 +1,14 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/netdev.webgl.samdriver.xyz:/etc/nginx/conf.d/default.conf
+      - ./public:/var/www/webgl/public
+  sockets:
+    image: node:18.18.2
+    volumes:
+      - .:/var/www/webgl
+    command: ["node", "/var/www/webgl/sockets/server.js"]

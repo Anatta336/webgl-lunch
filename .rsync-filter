@@ -1,0 +1,7 @@
+.git
+.gitignore
+.rsync-filter
+nginx
+scripts
+src
+.bash_aliases
