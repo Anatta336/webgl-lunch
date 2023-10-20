@@ -22,3 +22,15 @@ Build the assets locally first. Assuming you have SSH set up locally with my pri
 
 ## Server
 `188.166.154.230`
+
+For a realtime stream of socket service logs (good for debugging) run this on the server:
+```
+$ journalctl -u webgl-sockets -f
+```
+
+The sockets server is run as a service:
+```
+$ systemctl status webgl-sockets
+```
+
+The static files are served through nginx. Which is also run as a systemd service.
