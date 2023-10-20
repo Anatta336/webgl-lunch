@@ -2,6 +2,7 @@
 .gitignore
 .rsync-filter
 nginx
+systemd
 scripts
 src
 .bash_aliases
