@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# If it has been updated locally, deploys changes to the sockets service to remote server.
+# Intended to be called from the deploy.sh script.
+
 remote_ip=$1
 
 socket_local_check=$(md5sum ./systemd/webgl-sockets.service | awk '{ print $1 }')

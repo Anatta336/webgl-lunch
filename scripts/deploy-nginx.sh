@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# If it has updated locally, deploys nginx config to remote server.
+# Intended to be called from the deploy.sh script.
+
 remote_ip=$1
 
 RED='\033[0;31m'

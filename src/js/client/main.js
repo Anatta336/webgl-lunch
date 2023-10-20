@@ -1,46 +1,68 @@
-const socket = io();
+window.socket = io();
 
-console.log('Hello, world!');
-
-socket.on('connect', () => {
+window.socket.on('connect', () => {
     console.log('Connected.');
 });
 
-const buttons = {
-    'a': document.getElementById('in-a'),
-    'b': document.getElementById('in-b'),
-    'c': document.getElementById('in-c'),
-};
+const contentElement = document.getElementById('content');
 
-const lights = {
-    'a': document.getElementById('out-a'),
-    'b': document.getElementById('out-b'),
-    'c': document.getElementById('out-c'),
-};
+// Set up navigation.
+document.querySelectorAll('nav > div').forEach((navElement) => {
+    navElement.addEventListener('click', () => {
+        const routeName = navElement.getAttribute('data-route') ?? ''
 
-// When clicking a button, send a socket message.
-Object.entries(buttons).forEach(([key, button]) => {
-    button.addEventListener('click', () => {
-        console.log(`Sending: ${key}`);
-        socket.emit('pickLight', key);
+        if (!routeName) {
+            // No route to follow.
+            return;
+        }
 
-        turnOnLight(key);
-    });
+        goToRoute(routeName, true);
+    })
 });
 
-// When receiving a socket message, turn on the corresponding light.
-socket.on('enableLight', (destination) => {
-    console.log(`Received: ${destination}`);
-
-    turnOnLight(destination);
+// When receiving a socket message, go to the route.
+socket.on('route-current', (value) => {
+    goToRoute(value);
 });
 
-function turnOnLight(destination) {
-    // Turn off all lights.
-    Object.values(lights).forEach((light) => {
-        light.classList.remove('on');
-    });
+// Ask the server what the current route should be.
+socket.emit('route-check');
 
-    // Turn on the selected light.
-    lights[destination]?.classList.add('on');
+function goToRoute(route, sendEmit = false) {
+    fetch(`pages/${route}.html`)
+        .then((response) => response.text())
+        .then((html) => {
+
+            if (sendEmit) {
+                // Tell everyone else to go here too.
+                window.socket.emit('route-activate', route);
+            }
+
+            // Parse incoming HTML.
+            const parser = new DOMParser();
+            const incomingDocument = parser.parseFromString(html, 'text/html');
+
+            // Grab the <body> and use it as content.
+            const body = incomingDocument.querySelector('body');
+            contentElement.innerHTML = body.innerHTML;
+
+            document.title = incomingDocument.title ?? 'WebGL';
+
+            // If the previous page had a deconstruct function, call it.
+            if (document.tidyPage) {
+                document.tidyPage();
+                document.tidyPage = null;
+            }
+
+            // Add any scripts to the page.
+            const scripts = incomingDocument.querySelectorAll('script');
+            scripts.forEach((script) => {
+                const newScript = document.createElement('script');
+                newScript.textContent = script.textContent;
+                contentElement.appendChild(newScript);
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 }

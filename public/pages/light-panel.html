@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Light Panel</title>
+
+    <script defer>
+        // Using `var` to avoid "already defined" errors when visiting same page.
+        var buttons = {
+            'a': document.getElementById('in-a'),
+            'b': document.getElementById('in-b'),
+            'c': document.getElementById('in-c'),
+        };
+
+        var lights = {
+            'a': document.getElementById('out-a'),
+            'b': document.getElementById('out-b'),
+            'c': document.getElementById('out-c'),
+        };
+
+        // Set up click listeners on buttons.
+        Object.entries(buttons).forEach(([key, button]) => {
+            button.addEventListener('click', () => {
+                // Send message to the server through socket.io.
+                socket.emit('light-activate', key);
+
+                turnOnLight(key);
+            });
+        });
+
+        // When receiving a socket message, turn on the corresponding light.
+        socket.on('light-current', (key) => {
+            turnOnLight(key);
+        });
+
+        // When leaving this page, stop listening for socket messages.
+        document.tidyPage = () => {
+            socket.off('light-current');
+        };
+
+        // As we've just started up, ask the server what's currently active.
+        socket.emit('light-check');
+
+        function turnOnLight(key) {
+            // Turn off all lights.
+            Object.values(lights).forEach((light) => {
+                light.classList.remove('on');
+            });
+
+            // Turn on the selected light.
+            lights[key]?.classList.add('on');
+        }
+    </script>
+</head>
+<body>
+    <h1>Light Panel</h1>
+
+    <div class="panel">
+        <div class="input-buttons">
+            <div id="in-a">A</div>
+            <div id="in-b">B</div>
+            <div id="in-c">C</div>
+        </div>
+
+        <div class="output-lights">
+            <div id="out-a">A</div>
+            <div id="out-b">B</div>
+            <div id="out-c">C</div>
+        </div>
+    </div>
+</body>
+
+
+</html>

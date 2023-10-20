@@ -1,0 +1,17 @@
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 200px;
+}
+
+[data-route] {
+    background-color: #b4d3b7;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

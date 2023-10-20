@@ -1,16 +1,16 @@
 
-## Building locally
+## Building assets locally
 ```
 $ docker run -u 1000 --name webgl-npm --rm -it -v "$(pwd)":/app -w /app node:18.18.2 npm install
 ```
-There's a `.bash_aliases` file for shortcuts, although that uses the alias `npm` which you may not want on your system.
+There's a `.bash_aliases` file for shortcuts, although that sets up aliases `npm` and `node` which may well be disruptive on your system.
 
 ## Running locally
 Have a reasonably recent version of docker-compose already set up and working, then run:
 ```
 $ docker-compose up -d
 ```
-Set your computer's hosts file so `netdev.webgl.samdriver.xyz/` is mapped to `127.0.0.1`
+Set your computer's hosts file so `netdev.webgl.samdriver.xyz` is mapped to `127.0.0.1`
 
 You should be able to access the site locally at: http://netdev.webgl.samdriver.xyz/
 
@@ -18,9 +18,7 @@ You should be able to access the site locally at: http://netdev.webgl.samdriver.
 ```
 $ . scripts/deploy.sh
 ```
-Assuming you have SSH set up locally with my private key available.
+Build the assets locally first. Assuming you have SSH set up locally with my private key available.
 
 ## Server
-```
-ssh root@188.166.154.230
-```
+`188.166.154.230`
