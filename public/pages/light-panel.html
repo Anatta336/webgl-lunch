@@ -22,24 +22,24 @@
         Object.entries(buttons).forEach(([key, button]) => {
             button.addEventListener('click', () => {
                 // Send message to the server through socket.io.
-                socket.emit('light-activate', key);
+                socket.emit('light-set', key);
 
                 turnOnLight(key);
             });
         });
 
         // When receiving a socket message, turn on the corresponding light.
-        socket.on('light-current', (key) => {
+        socket.on('light', (key) => {
             turnOnLight(key);
         });
 
         // When leaving this page, stop listening for socket messages.
         document.tidyPage = () => {
-            socket.off('light-current');
+            socket.off('light');
         };
 
         // As we've just started up, ask the server what's currently active.
-        socket.emit('light-check');
+        socket.emit('light-get');
 
         function turnOnLight(key) {
             // Turn off all lights.

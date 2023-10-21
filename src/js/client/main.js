@@ -1,6 +1,6 @@
 window.socket = io();
 
-window.socket.on('connect', () => {
+socket.on('connect', () => {
     console.log('Connected.');
 });
 
@@ -21,21 +21,22 @@ document.querySelectorAll('nav > div').forEach((navElement) => {
 });
 
 // When receiving a socket message, go to the route.
-socket.on('route-current', (value) => {
+socket.on('route', (value) => {
     goToRoute(value);
 });
 
 // Ask the server what the current route should be.
-socket.emit('route-check');
+socket.emit('route-get');
 
 function goToRoute(route, sendEmit = false) {
     fetch(`pages/${route}.html`)
         .then((response) => response.text())
         .then((html) => {
 
-            if (sendEmit) {
-                // Tell everyone else to go here too.
-                window.socket.emit('route-activate', route);
+            // If the previous page had a deconstruct function, call it.
+            if (document.tidyPage) {
+                document.tidyPage();
+                document.tidyPage = null;
             }
 
             // Parse incoming HTML.
@@ -48,10 +49,9 @@ function goToRoute(route, sendEmit = false) {
 
             document.title = incomingDocument.title ?? 'WebGL';
 
-            // If the previous page had a deconstruct function, call it.
-            if (document.tidyPage) {
-                document.tidyPage();
-                document.tidyPage = null;
+            if (sendEmit) {
+                // Tell everyone else to go here too.
+                socket.emit('route-set', route);
             }
 
             // Add any scripts to the page.

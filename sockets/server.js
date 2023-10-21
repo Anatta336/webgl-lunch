@@ -1,4 +1,5 @@
 const { Server } = require('socket.io');
+const crypto = require('crypto');
 
 const io = new Server();
 
@@ -6,8 +7,20 @@ io.listen(3000);
 
 console.log('Socket.io listening on 3000.');
 
-let light = 'a';
-let route = 'one';
+// Hashed presenter password, for simplicity just hardcoded in.
+const superSecret = '89c590789772ba5fed725f333c5301d6ad43c9a0e7021608cef1bf2d22d8692f';
+
+// In a "real" system, don't use a static salt.
+const salt = '336';
+
+const stateStore = {
+    route: 'one',
+    light: 'a',
+    presenter: false,
+};
+
+// Can only be one presenter.
+var presenterId = null;
 
 io.sockets.on('connection', function (socket) {
 
@@ -16,34 +29,92 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log(`Socket disconnected: ${socket.id}`);
+
+        if (presenterId === socket.id) {
+            presenterId = null;
+
+            // Tell everyone else that there is no presenter.
+            stateStore.presenter = false;
+            socket.broadcast.emit('presenter', false);
+        }
     });
 
-    // -- Routes
-    socket.on('route-check', function () {
-        // Tell the new user what the current route is.
-        socket.emit('route-current', route);
+    socket.on('presenter-auth', (password) => {
+        const hashedPassword = crypto.pbkdf2Sync(password, salt, 100, 32, 'sha512').toString('hex');
+
+        if (hashedPassword === superSecret) {
+            console.log(`Presenter authenticated: ${socket.id}`);
+
+            if (presenterId) {
+                // Tell the old presenter they've been replaced.
+                io.to(presenterId).emit('presenter-auth', false);
+            }
+
+            presenterId = socket.id;
+
+            // Tell the client they've been authenticated.
+            socket.emit('presenter-auth', true);
+
+            // Tell everyone else that someone is now the presenter.
+            stateStore.presenter = true;
+            socket.broadcast.emit('presenter', true);
+        } else {
+            // Tell the client they failed to authenticate.
+            socket.emit('presenter-auth', false);
+        }
     });
-    socket.on('route-activate', function (value) {
-        console.log(`${socket.id} activated route ${value}`);
-        route = value;
+
+    socket.onAny((eventName, ...args) => {
+        // Handle -get requests.
+        if (eventName.endsWith('-get')) {
+            attemptToProvideValue(eventName.replace('-get', ''));
+        }
+
+        // Handle -set requests.
+        if (eventName.endsWith('-set')) {
+            attemptToSetValue(eventName.replace('-set', ''), args[0]);
+        }
+    });
+
+    /**
+     * @returns {boolean} If this socket is the presenter.
+     */
+    function isPresenter() {
+        if (!presenterId) {
+            // No presenter, so act as if everyone is.
+            return true;
+        }
+
+        return socket.id === presenterId;
+    }
+
+    /**
+     * @param {string} name Name of value to try to send.
+     * @returns {boolean} If a value with that name was found.
+     */
+    function attemptToProvideValue(name) {
+        if (stateStore[name] === undefined) {
+            return false;
+        }
+
+        socket.emit(name, stateStore[name]);
+
+        return true;
+    }
+
+    /**
+     * @param {string} name Name of value to try to store against.
+     * @param {any} value Value to store.
+     */
+    function attemptToSetValue(name, value) {
+        if (!isPresenter()) {
+            // Non-presenters can't set values.
+            return;
+        }
+
+        stateStore[name] = value;
 
         // Send message to everyone except the sender.
-        socket.broadcast.emit('route-current', route);
-    });
-
-    // -- Lights
-    socket.on('light-check', function () {
-        // Tell the new user what the current light is.
-        socket.emit('light-current', light);
-    });
-    socket.on('light-activate', function (value) {
-        console.log(`${socket.id} activated light ${value}`);
-
-        light = value;
-
-        // Send message to everyone except the sender.
-        socket.broadcast.emit('light-current', light);
-    });
-
-    // TODO: general purpose set and check.
+        socket.broadcast.emit(name, value);
+    }
 });
