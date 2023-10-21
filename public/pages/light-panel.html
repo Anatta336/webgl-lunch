@@ -18,37 +18,68 @@
             'c': document.getElementById('out-c'),
         };
 
+        var activeLight = '';
+
         // Set up click listeners on buttons.
         Object.entries(buttons).forEach(([key, button]) => {
             button.addEventListener('click', () => {
-                // Send message to the server through socket.io.
-                socket.emit('light-set', key);
 
-                turnOnLight(key);
+                if (presenterAuth?.isPresenterLocal() ?? false) {
+                    // Send message to the server through socket.io.
+                    socket.emit('light-set', key);
+                }
+
+                updateLocalState(key);
             });
         });
 
         // When receiving a socket message, turn on the corresponding light.
         socket.on('light', (key) => {
-            turnOnLight(key);
+            if (!(presenterAuth?.isFollowingPresenter() ?? true)) {
+                // Not following presenter, so ignore the message.
+                return;
+            }
+            updateLocalState(key);
         });
 
-        // When leaving this page, stop listening for socket messages.
+        presenterAuth.addBecomePresenterCallback(broadcastLightState);
+        presenterAuth.addStartFollowingCallback(requestPresenterLightState);
+
+        // When leaving this page, stop listening for light socket messages.
         document.tidyPage = () => {
             socket.off('light');
+            presenterAuth.removeBecomePresenterCallback(broadcastLightState);
         };
 
-        // As we've just started up, ask the server what's currently active.
-        socket.emit('light-get');
+        if (presenterAuth?.isFollowingPresenter() ?? false) {
+            // As we've just arrived on the page, ask the server what's currently active.
+            socket.emit('light-get');
+        }
 
-        function turnOnLight(key) {
+        function broadcastLightState() {
+            console.log('broadcastLightState');
+            if (activeLight == '') {
+                return;
+            }
+
+            socket.emit('light-set', activeLight);
+        }
+
+        function requestPresenterLightState() {
+            console.log('requestPresenterLightState');
+            socket.emit('light-get');
+        }
+
+        function updateLocalState(key) {
+            activeLight = key;
+
             // Turn off all lights.
             Object.values(lights).forEach((light) => {
                 light.classList.remove('on');
             });
 
             // Turn on the selected light.
-            lights[key]?.classList.add('on');
+            lights[activeLight]?.classList.add('on');
         }
     </script>
 </head>

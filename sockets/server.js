@@ -40,10 +40,12 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('presenter-auth', (password) => {
+        console.log(`${socket.id} -> presenter-auth attempt`);
+
         const hashedPassword = crypto.pbkdf2Sync(password, salt, 100, 32, 'sha512').toString('hex');
 
         if (hashedPassword === superSecret) {
-            console.log(`Presenter authenticated: ${socket.id}`);
+            console.log(`${socket.id} -> presenter-auth success`);
 
             if (presenterId) {
                 // Tell the old presenter they've been replaced.
@@ -59,12 +61,21 @@ io.sockets.on('connection', function (socket) {
             stateStore.presenter = true;
             socket.broadcast.emit('presenter', true);
         } else {
+            console.log(`${socket.id} -> presenter-auth failed`);
+
             // Tell the client they failed to authenticate.
             socket.emit('presenter-auth', false);
         }
     });
 
     socket.onAny((eventName, ...args) => {
+        if (eventName === 'presenter-auth') {
+            // Handled separately, and don't want to log passwords.
+            return;
+        }
+
+        console.log(`${socket.id} -> ${eventName} | ${args}`);
+
         // Handle -get requests.
         if (eventName.endsWith('-get')) {
             attemptToProvideValue(eventName.replace('-get', ''));
@@ -80,11 +91,6 @@ io.sockets.on('connection', function (socket) {
      * @returns {boolean} If this socket is the presenter.
      */
     function isPresenter() {
-        if (!presenterId) {
-            // No presenter, so act as if everyone is.
-            return true;
-        }
-
         return socket.id === presenterId;
     }
 
@@ -97,6 +103,7 @@ io.sockets.on('connection', function (socket) {
             return false;
         }
 
+        console.log(`${socket.id} <- ${name} | ${stateStore[name]}`);
         socket.emit(name, stateStore[name]);
 
         return true;
@@ -115,6 +122,7 @@ io.sockets.on('connection', function (socket) {
         stateStore[name] = value;
 
         // Send message to everyone except the sender.
+        console.log(`${socket.id} !- ${name} | ${stateStore[name]}`);
         socket.broadcast.emit(name, value);
     }
 });

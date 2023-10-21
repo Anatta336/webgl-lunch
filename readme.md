@@ -38,10 +38,6 @@ $ systemctl status webgl-sockets
 The static files are served through nginx. Which is also run as a systemd service.
 
 ## Plan
-### Navigation
-- Able to mark self as presenter.
-- Lock or unlock following.
-
 ### Title page
 - Moderately impressive.
 - Interactive, click to move.
@@ -75,3 +71,7 @@ The static files are served through nginx. Which is also run as a systemd servic
 - Highly parallel.
 - Matrix multiply operations.
 - Application in AI and cryptography.
+
+## Would nice
+- Expand sync system to allow per-user data so other users can broadcast without overwriting presenter's.
+- Use above for "multiplayer" experience.

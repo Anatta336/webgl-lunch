@@ -1,0 +1,24 @@
+#presenter {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 150px;
+}
+
+#presenter-status-icon, #presenter-login-icon {
+    font-size: 30px;
+    user-select: none;
+}
+
+#presenter-password {
+    padding: 3px 5px;
+    width: 100%;
+    border: 3px solid #0d0d0d;
+    border-radius: 3px;
+}
