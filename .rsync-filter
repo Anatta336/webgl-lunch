@@ -6,3 +6,4 @@ systemd
 scripts
 src
 .bash_aliases
+.vscode

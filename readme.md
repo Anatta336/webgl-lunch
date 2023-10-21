@@ -5,6 +5,8 @@ $ docker run -u 1000 --name webgl-npm --rm -it -v "$(pwd)":/app -w /app node:18.
 ```
 There's a `.bash_aliases` file for shortcuts, although that sets up aliases `npm` and `node` which may well be disruptive on your system.
 
+If using VSCode, there's a "npm install" and "watch" task set up which uses the above.
+
 ## Running locally
 Have a reasonably recent version of docker-compose already set up and working, then run:
 ```
@@ -34,3 +36,42 @@ $ systemctl status webgl-sockets
 ```
 
 The static files are served through nginx. Which is also run as a systemd service.
+
+## Plan
+### Navigation
+- Able to mark self as presenter.
+- Lock or unlock following.
+
+### Title page
+- Moderately impressive.
+- Interactive, click to move.
+- Remote attendees have their own little guy.
+
+### Shop interface
+- 3D in a practical context.
+
+### What's hard/slow
+- Realistic people.
+- Animation.
+- Dense environments.
+- "Someone takes a bite from a slice of bread".
+
+### Meshs and vertex shader
+- Blender introduction.
+- Positions are transformed to screenspace.
+- History of perspective-correct art. Escher playing with it.
+- Virtual camera, control over field of view.
+- Idea of vector and matrix operations.
+- Demo of location calculation.
+
+### Textures and fragment shader
+- UV mapping, paper wrapping analogy.
+- Painting to a model.
+- Idea of non-colour data in textures.
+- Image split up into pixels, each calculated individually.
+- Demo of pixel colour calculation.
+
+### Specialised hardware
+- Highly parallel.
+- Matrix multiply operations.
+- Application in AI and cryptography.
