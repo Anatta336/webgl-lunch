@@ -25,6 +25,7 @@ export default function presenterAuth(socket) {
     const becomePresenterCallbacks = [];
     const startFollowingCallbacks = [];
 
+    updateIconState();
     prepareEventListeners();
     fetchPresenterState();
 
@@ -69,9 +70,14 @@ export default function presenterAuth(socket) {
             return;
         }
 
-        // I am a free person.
-        statusIconElement.innerText = 'lock_open';
-        return;
+        if (presenterActive) {
+            // Presenter is active, but I'm ignoring them.
+            statusIconElement.innerText = 'lock_open';
+            return;
+        }
+
+        // No presenter, so show no icon.
+        statusIconElement.innerText = '';
     }
 
     function prepareEventListeners() {
