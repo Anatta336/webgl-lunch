@@ -7,11 +7,6 @@ io.listen(3000);
 
 console.log('Socket.io listening on 3000.');
 
-// Hashed presenter password, for simplicity just hardcoded in.
-const superSecret = '89c590789772ba5fed725f333c5301d6ad43c9a0e7021608cef1bf2d22d8692f';
-
-// In a "real" system, don't use a static salt.
-const salt = '336';
 
 const stateStore = {
     route: 'one',
@@ -42,9 +37,15 @@ io.sockets.on('connection', function (socket) {
     socket.on('presenter-auth', (password) => {
         console.log(`${socket.id} -> presenter-auth attempt`);
 
-        const hashedPassword = crypto.pbkdf2Sync(password, salt, 100, 32, 'sha512').toString('hex');
+        const hashedPassword = crypto.pbkdf2Sync(
+            password,
+            process.env.SOCKET_PRESENTER_SALT,
+            100,
+            32,
+            'sha512'
+        ).toString('hex');
 
-        if (hashedPassword === superSecret) {
+        if (hashedPassword === process.env.SOCKET_PRESENTER_PASSWORD_HASHED) {
             console.log(`${socket.id} -> presenter-auth success`);
 
             if (presenterId) {

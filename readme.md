@@ -37,10 +37,12 @@ $ systemctl status webgl-sockets
 
 The static files are served through nginx. Which is also run as a systemd service.
 
+The hashed password for accessing "presenter mode" is stored in `/etc/environment` as `SOCKET_PRESENTER_PASSWORD_HASHED`. See `sockets/server.js` for reference to how that's generated through `crypto.pbkdf2Sync`. The plaintext password isn't stored anywhere. If you forget it, you'll need to generate a new hash and update the environment variable on the server.
+
 ## Plan
 ### Title page
 - Moderately impressive.
-- Interactive, click to move.
+- Interactive, click to move?
 - Remote attendees have their own little guy.
 
 ### Shop interface
