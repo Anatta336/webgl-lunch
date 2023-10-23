@@ -9,6 +9,12 @@
 body {
     margin: 0;
     font-family: sans-serif;
-    background-color: #ecebe6;
     color: #2e2e2f;
+
+    min-height: 100vh;
+
+    background:
+    linear-gradient(328deg, #ffffff00 50%, #ffffff8f 65%, #ffffff00 95%),
+    radial-gradient(farthest-corner at 90% 50%, #9bd5ff1c 0%, transparent 90%),
+    radial-gradient(farthest-corner at 10% 10%, #ffb6fd 0%, #7bd1ff9e 100%);
 }

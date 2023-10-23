@@ -77,3 +77,7 @@ The hashed password for accessing "presenter mode" is stored in `/etc/environmen
 ## Would nice
 - Expand sync system to allow per-user data so other users can broadcast without overwriting presenter's.
 - Use above for "multiplayer" experience.
+- Show example of light mapping vs directional light.
+
+## Colour management
+https://discourse.threejs.org/t/updates-to-color-management-in-three-js-r152/50791

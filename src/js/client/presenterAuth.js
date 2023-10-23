@@ -25,6 +25,8 @@ export default function presenterAuth(socket) {
     const becomePresenterCallbacks = [];
     const startFollowingCallbacks = [];
 
+    // TODO: use observer file rather than rolling it again here.
+
     updateIconState();
     prepareEventListeners();
     fetchPresenterState();
@@ -158,8 +160,6 @@ export default function presenterAuth(socket) {
     }
 
     function handlePresenterStatus(value) {
-        console.log('Presenter active? ' + value); // TODO: temp
-
         if (presenterActive == value) {
             // No change.
             return;

@@ -21,12 +21,9 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
     // When receiving a socket message, go to the route.
     socket.on('route', (value) => {
         if (!shouldFollowPresenter()) {
-            console.log(`Received route: ${value} but ignoring.`); // TODO: temp
-
             return;
         }
 
-        console.log(`Received route: ${value} and following.`); // TODO: temp
         goToRoute(value);
     });
 
@@ -38,7 +35,6 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
         requestPresenterRoute,
         getCurrentRoute: () => currentRoute,
         broadcastCurrentRoute: () => {
-            console.log(`manually broadcasting route-set: ${currentRoute}`); // TODO: temp
             socket.emit('route-set', currentRoute);
         }
     };
@@ -80,7 +76,6 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
 
             if (sendEmit) {
                 // Tell everyone else to go here too.
-                console.log(`emitting route-set: ${route}`); // TODO: temp
                 socket.emit('route-set', route);
             }
 

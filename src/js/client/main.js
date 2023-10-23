@@ -1,5 +1,7 @@
 import createPresenterAuth from './presenterAuth.js';
-import createRouter from './router.js';
+import buildRouter from './router.js';
+import buildScene from './scene.js';
+import buildModel from './model.js';
 
 /**
  * @typedef {import('./presenterAuth.js').PresenterAuth} PresenterAuth
@@ -18,7 +20,7 @@ const presenterAuth = createPresenterAuth(socket);
 window.presenterAuth = presenterAuth;
 
 // Set up router, available globally.
-const router = createRouter(
+const router = buildRouter(
     socket,
     presenterAuth.shouldIgnoreLocalInput,
     presenterAuth.isFollowingPresenter
@@ -32,3 +34,7 @@ presenterAuth.addBecomePresenterCallback(router.broadcastCurrentRoute);
 presenterAuth.addStartFollowingCallback(() => {
     router.requestPresenterRoute();
 });
+
+// Make builders available globally so non-bundled JS can access them.
+window.buildScene = buildScene;
+window.buildModel = buildModel;

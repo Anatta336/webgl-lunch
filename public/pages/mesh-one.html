@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mesh</title>
+<script defer>
+    var scene = window.buildScene(document.getElementById('scene-one'));
+
+    var model = window.buildModel();
+    model.onReady.addCallback(() => {
+        scene.addModel(model);
+    });
+
+    document.tidyPage = () => {
+        // TODO: Stop listening for presenter events.
+        // TODO: remove becomePresenterCallback and/or startFollowingCallback.
+
+        scene.dispose();
+    };
+</script>
+</head>
+<body>
+    <h1>Example</h1>
+    <p>The 3D shape of an object is made up of vertices, joined together to make faces.</p>
+
+    <div id="scene-one" style="max-width:800px;height:500px;"></div>
+
+</body>
+</html>
