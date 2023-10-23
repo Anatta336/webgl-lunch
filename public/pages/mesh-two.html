@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Mesh</title>
 <script defer>
-    var scene = window.buildScene(document.getElementById('mesh-one'));
+    var scene = window.buildScene(document.getElementById('mesh-two'));
 
-    var model = window.buildModelFluvial();
+    var model = window.buildModelSand();
     model.onReady.addCallback(() => {
         scene.addModel(model);
     });
@@ -21,6 +21,6 @@
 </head>
 <body>
     <h1>Mesh One</h1>
-    <div id="mesh-one" style="max-width:840px;height:700px;"></div>
+    <div id="mesh-two" style="max-width:840px;height:700px;"></div>
 </body>
 </html>

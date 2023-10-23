@@ -68,6 +68,7 @@ The hashed password for accessing "presenter mode" is stored in `/etc/environmen
 - Idea of non-colour data in textures.
 - Image split up into pixels, each calculated individually.
 - Demo of pixel colour calculation.
+- Show a per-channel view of the textures. Explain normal as "what would be lit up".
 
 ### Specialised hardware
 - Highly parallel.

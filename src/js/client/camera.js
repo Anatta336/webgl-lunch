@@ -30,7 +30,7 @@ export default function buildCamera(wrapElement) {
 
     // Initial position.
     cameraControl.target.set(0, 0, 0);
-    cameraThree.position.set(0, 0, 0.3);
+    cameraThree.position.set(0.20, 0.05, 0);
     cameraControl.update();
 
     return {

@@ -27,6 +27,8 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
         goToRoute(value);
     });
 
+    goToRoute('mesh-one');
+
     // Ask the server what the current route should be.
     requestPresenterRoute();
 

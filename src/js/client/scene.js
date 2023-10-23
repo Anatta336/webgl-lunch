@@ -6,7 +6,7 @@ import createCamera from './camera.js';
 
 /**
  * @typedef {import('./observer.js').Observer} Observer
- * @typedef {import('./model').LocalModel} LocalModel
+ * @typedef {import('./modelSand.js').LocalModel} LocalModel
  * @typedef {import('./renderer').LocalRenderer} LocalRenderer
  * @typedef {import('./camera').LocalCamera} LocalCamera
  */
@@ -41,7 +41,7 @@ export default function buildScene(sceneElement) {
     const renderer = createRenderer(sceneElement, sceneThree, camera);
 
     // To run code on each render frame, add a callback to the renderer.
-    // (Note you usually want to uncouple render frames from physics frames).
+    // (If this were more interactive, you'd want to decouple physics from rendering).
     renderer.onBeforeRender.addCallback(camera.perFrame);
 
     var hdri = null;
@@ -70,7 +70,8 @@ export default function buildScene(sceneElement) {
 
             // Example of using directional lighting instead.
             // const light = new THREE.DirectionalLight(0xffffff, 1);
-            // light.position.set(0, 1, 1);
+            // light.position.set(1, 0.2, 0);
+            // light.intensity = 3.0;
             // sceneThree.add(light);
 
             handleReady();

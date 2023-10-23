@@ -9,7 +9,6 @@ import createObserver from './observer.js';
 
 /**
  * @typedef {import('./observer.js').Observer} Observer
- * @typedef {import('./model').LocalModel} LocalModel
  * @typedef {import('./camera').LocalCamera} LocalCamera
  */
 
@@ -37,10 +36,10 @@ export default function buildRenderer(wrapElement, sceneThree, localCamera) {
         stencil: false,
     });
     rendererThree.setClearColor(0x000000, 0);
-    rendererThree.outputColorSpace = THREE.SRGBColorSpace;
+    rendererThree.outputColorSpace = THREE.LinearSRGBColorSpace;
     rendererThree.setPixelRatio(currentPixelRatio);
 
-    sceneThree.backgroundIntensity = 0.4;
+    sceneThree.backgroundIntensity = 0.6;
 
     // Prepare post-processing stack.
     // const composer = null;
@@ -58,13 +57,18 @@ export default function buildRenderer(wrapElement, sceneThree, localCamera) {
         1.80  // threshold
     );
     const toneMapPass = new ShaderPass(ACESFilmicToneMappingShader);
+    toneMapPass.uniforms.exposure.value = 2;
+
     const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
 
     // (Reminder that the order of passes is very much important.)
     composer.addPass(renderPass);
     composer.addPass(bloomPass);
-    // composer.addPass(toneMapPass); // Disabled for now as it simply looks better without.
-    composer.addPass(gammaCorrectionPass);
+    composer.addPass(toneMapPass);
+
+    // Disabled because it looks better without.
+    // Is the tone mapping pass converting to sRGB somehow?
+    // composer.addPass(gammaCorrectionPass);
 
     wrapElement.appendChild(rendererThree.domElement);
 
