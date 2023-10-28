@@ -56,6 +56,7 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
     - Book of Optics 1027CE
     - Projected image changes size with distance.
     - Apparent length of edges radically different on screen. This is foreshortening.
+    - Projection removes a dimension. In this diagram 2 to 1. We'll be looking at 3 to 2.
 
 - Positions are transformed to screenspace.
 

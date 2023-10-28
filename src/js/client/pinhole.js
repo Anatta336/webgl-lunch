@@ -9,7 +9,11 @@ import createObserver from './observer.js';
  * @property {Point} pointA
  * @property {Point} pointB
  *
+ * @typedef {import('./observer.js').Observer} Observer
+ *
  * @typedef {Object} Pinhole
+ * @property {Observer} onPlace
+ * @property {function(number, number): void} placeSource
  * @property {function(): void} dispose
  */
 
@@ -54,7 +58,7 @@ export default function buildPinhole(canvasElement) {
 
     /** @type {Edge[]} */
     let sourceEdges = [];
-    placeSource(canvasElement.clientWidth - 200, 200);
+    placeSource(canvasElement.clientWidth - sourceSize, canvasElement.clientHeight * 0.5);
 
     window.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mouseup', onMouseUp);

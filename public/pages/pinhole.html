@@ -7,9 +7,26 @@
     <script defer>
         var pinhole = window.buildPinhole(document.getElementById('pinhole-canvas'));
 
-        // TODO: set up socket stuff for placing.
+        socket.on('pinhole', (data) => {
+            if (!(presenterAuth?.isFollowingPresenter() ?? true)) {
+                // Not following presenter, so ignore the message.
+                return;
+            }
+
+            if (data.x != null && data.y != null) {
+                pinhole.placeSource(data.x, data.y);
+            }
+        });
+
+        pinhole.onPlace.addCallback((x, y) => {
+            if (presenterAuth?.isPresenterLocal() ?? false) {
+                // Send message to the server through socket.io.
+                socket.emit('pinhole-set', {x, y});
+            }
+        });
 
         document.tidyPage = () => {
+            socket.off('pinhole');
             pinhole?.dispose();
         };
     </script>
@@ -22,7 +39,8 @@
     justify-content: space-between;
 }
 #pinhole-desc {
-    flex: 0 0 650px;
+    flex: 0 0 700px;
+    margin: 0;
 }
 #pinhole-desc li {
     margin-bottom: 1em;
@@ -37,8 +55,9 @@
         <ul id="pinhole-desc">
             <li>An illuminated surface will send out light in every direction.</li>
             <li>A small hole restricts which light rays will get through to our surface, allowing a clear image.</li>
-            <li>Experiments using pinhole cameras by Ibn al-Haytham أبو علي، الحسن بن الحسن بن الهيثم first described the nature of light as travelling in straight lines, and the core principles of optics.</li>
+            <li>Experiments using pinhole cameras by Ibn al-Haytham أبو علي الحسن بن الحسن بن الهيثم first described the nature of light as travelling in straight lines, and the core principles of optics.</li>
             <li>He also invented the scientific method, 400 years before the renaissance.</li>
+            <li>Wrote the Book of Optics, which once translated into Latin influenced the work of Kepler, Galileo, and Newton.</li>
 
         </ul>
         <canvas id="pinhole-canvas" width="700" height="500"></canvas>
