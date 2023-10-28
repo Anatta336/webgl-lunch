@@ -34,9 +34,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav>
-        <div data-route="one">One</div>
-        <div data-route="two">Two</div>
+    <nav class="hidden">
+        <div data-route="example">Example</div>
         <div data-route="light-panel">Lights</div>
         <div data-route="mesh-one">Fluvial</div>
         <div data-route="mesh-two">Sand</div>
@@ -46,6 +45,8 @@
         <i id="presenter-status-icon" class="material-symbols-outlined"></i>
 
         <i id="presenter-login-icon" class="material-symbols-outlined">key</i>
+
+        <i id="menu-icon" class="material-symbols-outlined">toast</i>
 
         <form id="presenter-login" class="hidden">
             <input type="password" id="presenter-password" placeholder="Password">
@@ -57,4 +58,9 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="client-bundle.js"></script>
+<script>
+    document.getElementById('menu-icon').addEventListener('click', () => {
+        document.getElementsByTagName('nav')[0]?.classList.toggle('hidden');
+    });
+</script>
 </html>

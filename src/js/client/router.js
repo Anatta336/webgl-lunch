@@ -152,6 +152,9 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
 
             // If the page we just loaded had any router elements, prepare them too.
             prepareNavigationEventListeners(contentElement);
+
+            // Add/remove 'active' class on nav elements.
+            updateActiveNavElements();
         })
         .catch((error) => {
             console.error(error);
@@ -175,6 +178,23 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
             const newScript = document.createElement('script');
             newScript.textContent = script.textContent;
             contentElement.appendChild(newScript);
+        });
+    }
+
+    function updateActiveNavElements() {
+        document.querySelectorAll('[data-route]').forEach((navElement) => {
+            const routeName = navElement.getAttribute('data-route') ?? '';
+
+            if (routeName == '') {
+                // No route to checl
+                return;
+            }
+
+            if (routeName == currentRoute) {
+                navElement.classList.add('active');
+            } else {
+                navElement.classList.remove('active');
+            }
         });
     }
 };

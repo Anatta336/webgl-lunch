@@ -41,8 +41,8 @@ The hashed password for accessing "presenter mode" is stored in `/etc/environmen
 
 ## Plan
 ### Universal
-- Hide/show nav
-- Example slide layout
+- Fix "Model not ready" error
+- Clean up old webgl contexts. Implement the dispose() chain.
 
 ### Title page
 - Moderately impressive.

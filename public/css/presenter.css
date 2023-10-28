@@ -1,5 +1,5 @@
 #presenter {
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     padding: 5px;
@@ -9,6 +9,8 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     max-width: 150px;
+    gap: 5px;
+    align-items: center;
 }
 
 #presenter-status-icon, #presenter-login-icon {

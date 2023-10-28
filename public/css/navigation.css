@@ -1,17 +1,35 @@
 nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 5px;
-    max-width: 200px;
+    min-width: 200px;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    position: fixed;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    background: radial-gradient(farthest-corner at 20% 00%, #6fb2dbeb 0%, #ffdbf600 90%), radial-gradient(farthest-corner at 10% 90%, #7478ff 0%, #8f09a7 100%);
+    padding: 10px;
+    justify-content: center;
 }
 
 [data-route] {
-    background-color: #b4d3b7;
+    background-color: #0000003d;
+    color: #fff;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 2px;
     cursor: pointer;
-
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+[data-route]:hover {
+    background-color: #000000b8;
+}
+
+[data-route].active {
+    box-shadow: inset 0px 0px 0px 1px #fefefecc;
 }
