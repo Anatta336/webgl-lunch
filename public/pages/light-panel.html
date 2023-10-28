@@ -53,7 +53,7 @@
 
         if (presenterAuth?.isFollowingPresenter() ?? false) {
             // As we've just arrived on the page, ask the server what's currently active.
-            socket.emit('light-get');
+            requestPresenterLightState();
         }
 
         function broadcastLightState() {
