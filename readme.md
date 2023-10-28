@@ -50,12 +50,14 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
 - Something interactive.
 
 ### Meshs and vertex shader
-- Blender introduction?
-- Positions are transformed to screenspace.
 - History of perspective-correct art. Camera obscura.
     - Optics from Abu Ali al-Hasan ibn al-Haytham (known in west as Alhazen).
     - "ibinal hAY tham"
     - Book of Optics 1027CE
+    - Projected image changes size with distance.
+    - Apparent length of edges radically different on screen. This is foreshortening.
+
+- Positions are transformed to screenspace.
 
 - Virtual camera, control over field of view.
 - Idea of vector and matrix operations.
