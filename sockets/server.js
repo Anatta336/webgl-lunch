@@ -7,7 +7,6 @@ io.listen(3000);
 
 console.log('Socket.io listening on 3000.');
 
-
 const stateStore = {
     route: 'one',
     light: 'a',
@@ -37,15 +36,10 @@ io.sockets.on('connection', function (socket) {
     socket.on('presenter-auth', (password) => {
         console.log(`${socket.id} -> presenter-auth attempt`);
 
-        const hashedPassword = crypto.pbkdf2Sync(
-            password,
-            process.env.SOCKET_PRESENTER_SALT,
-            100,
-            32,
-            'sha512'
-        ).toString('hex');
+        const hashedAttempt = hashPassword(password);
+        const hashedCorrect = hashPassword(process.env.SOCKET_PRESENTER_PASSWORD);
 
-        if (hashedPassword === process.env.SOCKET_PRESENTER_PASSWORD_HASHED) {
+        if (hashedAttempt === hashedCorrect) {
             console.log(`${socket.id} -> presenter-auth success`);
 
             if (presenterId) {
@@ -93,6 +87,16 @@ io.sockets.on('connection', function (socket) {
      */
     function isPresenter() {
         return socket.id === presenterId;
+    }
+
+    function hashPassword(password) {
+        return crypto.pbkdf2Sync(
+            password,
+            process.env.SOCKET_PRESENTER_SALT ?? '',
+            100,
+            32,
+            'sha512'
+        ).toString('hex');
     }
 
     /**

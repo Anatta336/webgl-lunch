@@ -11,4 +11,7 @@ services:
     image: node:18.18.2
     volumes:
       - .:/var/www/webgl
+    environment:
+      - SOCKET_PRESENTER_SALT=123
+      - SOCKET_PRESENTER_PASSWORD=password
     command: ["node", "/var/www/webgl/sockets/server.js"]

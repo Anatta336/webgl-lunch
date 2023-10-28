@@ -16,6 +16,8 @@ Set your computer's hosts file so `netdev.webgl.samdriver.xyz` is mapped to `127
 
 You should be able to access the site locally at: http://netdev.webgl.samdriver.xyz/
 
+To access "presenter mode" click the key on the top-right and enter whatever password is set in `docker-compose.yml`. By default, `password`.
+
 ## Deploying
 ```
 $ . scripts/deploy.sh
@@ -37,7 +39,7 @@ $ systemctl status webgl-sockets
 
 The static files are served through nginx. Which is also run as a systemd service.
 
-The hashed password for accessing "presenter mode" is stored in `/etc/environment` as `SOCKET_PRESENTER_PASSWORD_HASHED`. See `sockets/server.js` for reference to how that's generated through `crypto.pbkdf2Sync`. The plaintext password isn't stored anywhere. If you forget it, you'll need to generate a new hash and update the environment variable on the server.
+The password for accessing "presenter mode" is stored in `/etc/environment` as `SOCKET_PRESENTER_PASSWORD`.
 
 ## Plan
 ### Universal
