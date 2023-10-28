@@ -26,6 +26,10 @@ import createCamera from './camera.js';
  */
 export default function buildScene(sceneElement) {
 
+    if (!sceneElement) {
+        return null;
+    }
+
     /**
      * @type {array<LocalModel>} models
      */
@@ -53,6 +57,7 @@ export default function buildScene(sceneElement) {
         addModel,
         removeModel,
         onReady,
+        sceneThree,
         dispose,
     };
 

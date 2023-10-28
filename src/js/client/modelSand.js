@@ -135,15 +135,31 @@ export default function buildModel() {
      * @returns {boolean} True if added to scene.
      */
     function addToScene(sceneThree) {
-        if (!meshThreeHandle || !meshThreeBulbHold) {
-            console.error('Model not ready.');
+        if (!isReadyToAddToScene()) {
+            onReady.addCallback(() => {
+                console.log('Adding model to scene after callback.');
+                sceneThree.add(meshThreeHandle);
+                sceneThree.add(meshThreeBulbHold);
+            });
+
+            console.log('Model not ready, so setting up callback.');
+
             return false;
         }
+
+        console.log('Adding model to scene.');
 
         sceneThree.add(meshThreeHandle);
         sceneThree.add(meshThreeBulbHold);
 
         return true;
+    }
+
+    /**
+     * @returns {boolean} True if ready to be added to scene.
+     */
+    function isReadyToAddToScene() {
+        return meshThreeHandle && meshThreeBulbHold;
     }
 
     /**

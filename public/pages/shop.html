@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <title>Shop</title>
 <script defer>
-    // var scene = window.buildScene(document.getElementById('mesh-one'));
+    // Prepare scenes.
+    var fluvialScene = window.buildScene(document.getElementById('fluvial-scene'));
+    var fluvialModel = window.buildModelFluvial();
+    console.log(fluvialModel);
+    fluvialScene.addModel(fluvialModel);
 
-    // var model = window.buildModelFluvial();
-    // model.onReady.addCallback(() => {
-    //     scene.addModel(model);
-    // });
+    // TODO:
+    // var bulbScene = window.buildScene(document.getElementById('bulb-scene'));
+    // var bulbModel = window.buildModelSand();
+    // console.log(bulbModel);
+    // bulbScene.addModel(bulbModel);
 
     var shopWrap = document.getElementById('shop-wrap');
     if (!shopWrap) {
@@ -50,12 +55,13 @@
 
     // When leaving this page, tidy up.
     document.tidyPage = () => {
-        socket.off('shop-size');
-        presenterAuth.removeBecomePresenterCallback(broadcastShopState);
+        socket?.off('shop-size');
+        presenterAuth?.removeBecomePresenterCallback(broadcastShopState);
 
-        resizeObserver.disconnect();
+        resizeObserver?.disconnect();
 
-        // scene.dispose();
+        fluvialScene?.dispose();
+        bulbScene?.dispose();
     };
 
     function broadcastShopState() {
@@ -81,16 +87,49 @@
     resize: both;
     overflow: auto;
     box-shadow: 0px 0px 13px 2px #0500343b;
+    margin: 0 auto;
+    padding: 15px;
+
+    font-family: 'Ruthie', cursive;
 }
+
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-rows: auto;
+    align-items: stretch;
+    gap: 15px;
+}
+
+.shop-item {
+    background-color: #9ba5ff;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
 </style>
     <h1>Shop Mockup</h1>
 
     <div id="shop-wrap">
-
+        <div class="shop-grid">
+            <div class="shop-item">
+                <div id="fluvial-scene"></div>
+                <div>Fluvial Accelerator</div>
+                <div class="price">£34.98</div>
+            </div>
+            <div class="shop-item">
+                <div id="bulb-scene"></div>
+                <div>Bulb Stabilisation</div>
+                <div class="price">£9.50</div>
+            </div>
+            <div class="shop-item">
+                <div class="shop-item-image"></div>
+                <div>Placeholder</div>
+                <div class="price">£0.95</div>
+            </div>
+        </div>
     </div>
-
-
-
-    <!-- <div id="mesh-one" style="max-width:840px;height:700px;"></div> -->
 </body>
 </html>

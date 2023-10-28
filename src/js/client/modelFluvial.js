@@ -98,6 +98,9 @@ export default function buildModel() {
                 material.roughnessMap    = occulsionRoughnessMetallic;
                 material.metalnessMap    = occulsionRoughnessMetallic;
                 material.envMapIntensity = 1.0;
+
+                // material.flatShading = true;
+                // material.wireframe = true;
             })
             .catch(console.error),
         ];
@@ -126,15 +129,31 @@ export default function buildModel() {
      * @returns {boolean} True if added to scene.
      */
     function addToScene(sceneThree) {
-        if (!meshFluvial || !meshTap) {
-            console.error('Model not ready.');
+        if (!isReadyToAddToScene()) {
+            onReady.addCallback(() => {
+                console.log('Adding model to scene after callback.');
+                sceneThree.add(meshFluvial);
+                sceneThree.add(meshTap);
+            });
+
+            console.log('Model not ready, so setting up callback.');
+
             return false;
         }
+
+        console.log('Adding model to scene.');
 
         sceneThree.add(meshFluvial);
         sceneThree.add(meshTap);
 
         return true;
+    }
+
+    /**
+     * @returns {boolean} True if ready to be added to scene.
+     */
+    function isReadyToAddToScene() {
+        return meshFluvial && meshTap;
     }
 
     /**
