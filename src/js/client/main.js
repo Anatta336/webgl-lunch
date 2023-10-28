@@ -4,6 +4,7 @@ import buildScene from './scene.js';
 import buildSceneShop from './sceneShop.js';
 import buildModelSand from './modelSand.js';
 import buildModelFluvial from './modelFluvial.js';
+import buildPinhole from './pinhole.js';
 
 /**
  * @typedef {import('./presenterAuth.js').PresenterAuth} PresenterAuth
@@ -42,3 +43,5 @@ window.buildScene = buildScene;
 window.buildSceneShop = buildSceneShop;
 window.buildModelSand = buildModelSand;
 window.buildModelFluvial = buildModelFluvial;
+
+window.buildPinhole = buildPinhole;

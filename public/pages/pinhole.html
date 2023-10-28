@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pinhole Camera</title>
+
+    <script defer>
+        var pinhole = window.buildPinhole(document.getElementById('pinhole-canvas'));
+
+        // TODO: set up socket stuff for placing.
+
+        document.tidyPage = () => {
+            pinhole?.dispose();
+        };
+    </script>
+</head>
+<body>
+    <style>
+#pinhole-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#pinhole-desc {
+    flex: 0 0 650px;
+}
+#pinhole-desc li {
+    margin-bottom: 1em;
+}
+#pinhole-canvas {
+    flex: 1 0 auto;
+}
+    </style>
+
+    <h1>Pinhole Camera</h1>
+    <div id="pinhole-wrap">
+        <ul id="pinhole-desc">
+            <li>An illuminated surface will send out light in every direction.</li>
+            <li>A small hole restricts which light rays will get through to our surface, allowing a clear image.</li>
+            <li>Experiments using pinhole cameras by Ibn al-Haytham أبو علي، الحسن بن الحسن بن الهيثم first described the nature of light as travelling in straight lines, and the core principles of optics.</li>
+            <li>He also invented the scientific method, 400 years before the renaissance.</li>
+
+        </ul>
+        <canvas id="pinhole-canvas" width="700" height="500"></canvas>
+    </div>
+</body>
+</html>

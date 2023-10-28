@@ -43,32 +43,23 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
 
 ## Plan
 ### Universal
-- Fix "Model not ready" error
 - Clean up old webgl contexts. Implement the dispose() chain.
 
 ### Title page
-- Moderately impressive.
-- Interactive, click to move?
-- Remote attendees have their own little guy.
-
-### Shop interface
-- Example of a practical context.
-
-### What's hard/slow
-- Realistic people.
-- Animation.
-- Dense environments.
-- "Someone takes a bite from a slice of bread".
+- Moderately impressive..? Viewed from land, NM logo in atmosphere.
+- Something interactive.
 
 ### Meshs and vertex shader
 - Blender introduction?
 - Positions are transformed to screenspace.
 - History of perspective-correct art. Camera obscura.
-- Optics from Abu Ali al-Hasan ibn al-Haytham (known in west as Alhazen).
+    - Optics from Abu Ali al-Hasan ibn al-Haytham (known in west as Alhazen).
+    - "ibinal hAY tham"
+    - Book of Optics 1027CE
+
 - Virtual camera, control over field of view.
 - Idea of vector and matrix operations.
 - Demo of location calculation.
-
 
 ### Textures and fragment shader
 - UV mapping, paper wrapping analogy.
@@ -83,6 +74,12 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
 - Highly parallel.
 - Matrix multiply operations.
 - Application in AI and cryptography.
+
+### What's hard/slow
+- Realistic people.
+- Animation.
+- Dense environments.
+- "Someone takes a bite from a slice of bread".
 
 ## Would nice
 - Expand sync system to allow per-user data so other users can broadcast without overwriting presenter's.
