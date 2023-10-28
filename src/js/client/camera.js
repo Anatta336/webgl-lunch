@@ -11,26 +11,43 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 /**
  * @param {HTMLElement} wrapElement
+ * @param {Object} options
  * @returns {LocalCamera}
  */
-export default function buildCamera(wrapElement) {
+export default function buildCamera(wrapElement, options = {}) {
     const cameraThree = new THREE.PerspectiveCamera(
-        70,
+        options.fov ?? 70,
         wrapElement.clientWidth / wrapElement.clientHeight,
-        0.001, 10
+        options.zNear ?? 0.001,
+        options.zFar ?? 10
     );
 
     const cameraControl = new OrbitControls(cameraThree, wrapElement);
 
+    if ((options.orbitSpeed ?? 0) > 0) {
+        cameraControl.autoRotate = true;
+        cameraControl.autoRotateSpeed = options.orbitSpeed;
+    }
+
     // Control settings.
-    cameraControl.dampingFactor = 0.05;
-    cameraControl.enableDamping = true;
-    cameraControl.maxDistance = 0.80;
-    cameraControl.minDistance = 0.06;
+    cameraControl.dampingFactor = options.dampingFactor ?? 0.05;
+    cameraControl.enableDamping = options.enableDamping ?? true;
+    cameraControl.maxDistance = options.maxDistance ?? 0.80;
+    cameraControl.minDistance = options.minDistance ?? 0.06;
+    cameraControl.enableZoom = options.enableZoom ?? true;
+    cameraControl.enablePan = options.enablePan ?? true;
 
     // Initial position.
-    cameraControl.target.set(0, 0, 0);
-    cameraThree.position.set(0.20, 0.05, 0);
+    cameraControl.target.set(
+        options.target?.x ?? 0,
+        options.target?.y ?? 0,
+        options.target?.z ?? 0
+    );
+    cameraThree.position.set(
+        options.position?.x ?? 0.13,
+        options.position?.y ?? 0.05,
+        options.position?.z ?? 0
+    );
     cameraControl.update();
 
     return {

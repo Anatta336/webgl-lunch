@@ -1,6 +1,7 @@
 import createPresenterAuth from './presenterAuth.js';
 import buildRouter from './router.js';
 import buildScene from './scene.js';
+import buildSceneShop from './sceneShop.js';
 import buildModelSand from './modelSand.js';
 import buildModelFluvial from './modelFluvial.js';
 
@@ -38,5 +39,6 @@ presenterAuth.addStartFollowingCallback(() => {
 
 // Make builders available globally so non-bundled JS can access them.
 window.buildScene = buildScene;
+window.buildSceneShop = buildSceneShop;
 window.buildModelSand = buildModelSand;
 window.buildModelFluvial = buildModelFluvial;

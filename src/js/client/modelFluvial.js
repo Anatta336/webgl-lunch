@@ -113,11 +113,16 @@ export default function buildModel() {
 
         if (!meshFluvial) {
             meshFluvial = new THREE.Mesh(geometry.fluvial, material.fluvial);
+            meshFluvial.position.x = 0.026571;
+            meshFluvial.position.y = 0;
+            meshFluvial.position.z = 0.03;
         }
 
         if (!meshTap) {
             meshTap = new THREE.Mesh(geometry.tap, material.fluvial);
-            meshTap.position.x = -0.026571;
+            meshTap.position.x = 0;
+            meshTap.position.y = 0;
+            meshTap.position.z = 0.03;
         }
 
         onReady.notify();

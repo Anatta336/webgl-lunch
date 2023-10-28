@@ -23,7 +23,7 @@ import createObserver from './observer.js';
  * @param {LocalCamera} localCamera
  * @returns {LocalRenderer}
  */
-export default function buildRenderer(wrapElement, sceneThree, localCamera) {
+export default function buildRenderer(wrapElement, sceneThree, localCamera, toneMap = true) {
 
     const onBeforeRender = createObserver();
     const onAfterRender = createObserver();
@@ -64,11 +64,12 @@ export default function buildRenderer(wrapElement, sceneThree, localCamera) {
     // (Reminder that the order of passes is very much important.)
     composer.addPass(renderPass);
     composer.addPass(bloomPass);
-    composer.addPass(toneMapPass);
-
-    // Disabled because it looks better without.
-    // Is the tone mapping pass converting to sRGB somehow?
-    // composer.addPass(gammaCorrectionPass);
+    if (toneMap) {
+        // Is the tone mapping pass also converting linear to sRGB somehow?
+        composer.addPass(toneMapPass);
+    } else {
+        composer.addPass(gammaCorrectionPass);
+    }
 
     wrapElement.appendChild(rendererThree.domElement);
 

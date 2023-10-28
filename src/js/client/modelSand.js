@@ -118,12 +118,13 @@ export default function buildModel() {
             meshThreeHandle = new THREE.Mesh(geometry.handle, material.handle);
 
             meshThreeHandle.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
-            meshThreeHandle.position.z = -0.03;
+            meshThreeHandle.position.z = -0.02;
             meshThreeHandle.position.y = 0.0115;
         }
 
         if (!meshThreeBulbHold) {
             meshThreeBulbHold = new THREE.Mesh(geometry.bulbHold, material.bulbHold);
+            meshThreeBulbHold.position.z = 0.01
         }
 
         onReady.notify();

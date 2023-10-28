@@ -5,16 +5,23 @@
     <title>Shop</title>
 <script defer>
     // Prepare scenes.
-    var fluvialScene = window.buildScene(document.getElementById('fluvial-scene'));
+    var fluvialScene = window.buildSceneShop(
+        document.getElementById('fluvial-scene'),
+        0x9ba5ff,
+        1.0,
+    );
     var fluvialModel = window.buildModelFluvial();
     console.log(fluvialModel);
     fluvialScene.addModel(fluvialModel);
 
-    // TODO:
-    // var bulbScene = window.buildScene(document.getElementById('bulb-scene'));
-    // var bulbModel = window.buildModelSand();
-    // console.log(bulbModel);
-    // bulbScene.addModel(bulbModel);
+    var bulbScene = window.buildSceneShop(
+        document.getElementById('bulb-scene'),
+        0x9ba5ff,
+        1.6,
+    );
+    var bulbModel = window.buildModelSand();
+    console.log(bulbModel);
+    bulbScene.addModel(bulbModel);
 
     var shopWrap = document.getElementById('shop-wrap');
     if (!shopWrap) {
@@ -84,6 +91,8 @@
     background: #eeeeee;
     min-width: 350px;
     min-height: 350px;
+    width: 800px;
+    height: 500px;
     resize: both;
     overflow: auto;
     box-shadow: 0px 0px 13px 2px #0500343b;
@@ -107,6 +116,20 @@
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: center;
+    box-shadow: 0px 4px 11px 0px #0000006e;
+}
+
+.shop-item .name,
+.shop-item .price {
+    background: #d3defe;
+    width: 100%;
+    text-align: center;
+}
+
+.scene {
+    width: 100%;
+    height: 380px;
+    background: #9fa6fb;
 }
 
 </style>
@@ -115,18 +138,43 @@
     <div id="shop-wrap">
         <div class="shop-grid">
             <div class="shop-item">
-                <div id="fluvial-scene"></div>
-                <div>Fluvial Accelerator</div>
+                <div id="fluvial-scene" class="scene"></div>
+                <div class="name">Fluvial Accelerator</div>
                 <div class="price">£34.98</div>
             </div>
             <div class="shop-item">
-                <div id="bulb-scene"></div>
-                <div>Bulb Stabilisation</div>
+                <div id="bulb-scene" class="scene"></div>
+                <div class="name">Bulb Stabilisation</div>
                 <div class="price">£9.50</div>
             </div>
             <div class="shop-item">
-                <div class="shop-item-image"></div>
-                <div>Placeholder</div>
+                <div class="shop-item-image scene"></div>
+                <div class="name">Placeholder</div>
+                <div class="price">£0.95</div>
+            </div>
+            <div class="shop-item">
+                <div class="shop-item-image scene"></div>
+                <div class="name">Placeholder</div>
+                <div class="price">£0.95</div>
+            </div>
+            <div class="shop-item">
+                <div class="shop-item-image scene"></div>
+                <div class="name">Placeholder</div>
+                <div class="price">£0.95</div>
+            </div>
+            <div class="shop-item">
+                <div class="shop-item-image scene"></div>
+                <div class="name">Placeholder</div>
+                <div class="price">£0.95</div>
+            </div>
+            <div class="shop-item">
+                <div class="shop-item-image scene"></div>
+                <div class="name">Placeholder</div>
+                <div class="price">£0.95</div>
+            </div>
+            <div class="shop-item">
+                <div class="shop-item-image scene"></div>
+                <div class="name">Placeholder</div>
                 <div class="price">£0.95</div>
             </div>
         </div>
