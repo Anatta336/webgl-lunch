@@ -40,13 +40,17 @@ The static files are served through nginx. Which is also run as a systemd servic
 The hashed password for accessing "presenter mode" is stored in `/etc/environment` as `SOCKET_PRESENTER_PASSWORD_HASHED`. See `sockets/server.js` for reference to how that's generated through `crypto.pbkdf2Sync`. The plaintext password isn't stored anywhere. If you forget it, you'll need to generate a new hash and update the environment variable on the server.
 
 ## Plan
+### Universal
+- Hide/show nav
+- Example slide layout
+
 ### Title page
 - Moderately impressive.
 - Interactive, click to move?
 - Remote attendees have their own little guy.
 
 ### Shop interface
-- 3D in a practical context.
+- Example of a practical context.
 
 ### What's hard/slow
 - Realistic people.
@@ -55,12 +59,14 @@ The hashed password for accessing "presenter mode" is stored in `/etc/environmen
 - "Someone takes a bite from a slice of bread".
 
 ### Meshs and vertex shader
-- Blender introduction.
+- Blender introduction?
 - Positions are transformed to screenspace.
-- History of perspective-correct art. Escher playing with it.
+- History of perspective-correct art. Camera obscura.
+- Optics from Abu Ali al-Hasan ibn al-Haytham (known in west as Alhazen).
 - Virtual camera, control over field of view.
 - Idea of vector and matrix operations.
 - Demo of location calculation.
+
 
 ### Textures and fragment shader
 - UV mapping, paper wrapping analogy.
@@ -69,6 +75,7 @@ The hashed password for accessing "presenter mode" is stored in `/etc/environmen
 - Image split up into pixels, each calculated individually.
 - Demo of pixel colour calculation.
 - Show a per-channel view of the textures. Explain normal as "what would be lit up".
+- Some discussion of HDR values for colours.
 
 ### Specialised hardware
 - Highly parallel.

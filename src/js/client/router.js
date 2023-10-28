@@ -16,7 +16,11 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
     const contentElement = document.getElementById('content');
     var currentRoute = '';
 
+    const orderedRoutes = buildOrderedRoutes(document);
+
     prepareNavigationEventListeners(document);
+
+    prepareKeyboardEventListeners();
 
     // When receiving a socket message, go to the route.
     socket.on('route', (value) => {
@@ -24,16 +28,19 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
             return;
         }
 
-        goToRoute(value);
+        goToRoute(value, false);
     });
 
-    goToRoute('mesh-one');
+    // Start at the first route by default.
+    goToRoute(orderedRoutes[0], false);
 
     // Ask the server what the current route should be.
     requestPresenterRoute();
 
     return {
         goToRoute,
+        goToNext,
+        goToPrevious,
         requestPresenterRoute,
         getCurrentRoute: () => currentRoute,
         broadcastCurrentRoute: () => {
@@ -43,6 +50,22 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
 
     function requestPresenterRoute() {
         socket.emit('route-get');
+    }
+
+    function buildOrderedRoutes(parentElement) {
+        const routeNames = [];
+        parentElement.querySelectorAll('[data-route]').forEach((navElement) => {
+            const routeName = navElement.getAttribute('data-route') ?? '';
+
+            if (routeName == '') {
+                // No route to follow.
+                return;
+            }
+
+            routeNames.push(routeName);
+        });
+
+        return routeNames;
     }
 
     function prepareNavigationEventListeners(parentElement) {
@@ -61,6 +84,50 @@ export default function buildRouter(socket, shouldIgnoreLocalInput, shouldFollow
                 }
             })
         });
+    }
+
+    function prepareKeyboardEventListeners() {
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+                goToPrevious(true);
+            } else if (event.key === 'ArrowRight') {
+                goToNext(true);
+            }
+        });
+    }
+
+    function goToNext(sendEmit = false) {
+        let currentIndex = orderedRoutes.indexOf(currentRoute);
+
+        if (currentIndex < 0) {
+            // Not in the ordered routes, so there's no "next".
+            return;
+        }
+
+        const nextRoute = orderedRoutes[Math.min(orderedRoutes.length - 1, (currentIndex + 1))];
+        if (nextRoute == currentRoute || nextRoute == undefined) {
+            // No next route.
+            return;
+        }
+
+        goToRoute(nextRoute, sendEmit);
+    }
+
+    function goToPrevious(sendEmit = false) {
+        let currentIndex = orderedRoutes.indexOf(currentRoute);
+
+        if (currentIndex < 0) {
+            // Not in the ordered routes, so there's no "next".
+            return;
+        }
+
+        const previousRoute = orderedRoutes[Math.max(0, (currentIndex - 1))];
+        if (previousRoute == currentRoute || previousRoute == undefined) {
+            // No previous route.
+            return;
+        }
+
+        goToRoute(previousRoute, sendEmit);
     }
 
     function goToRoute(route, sendEmit = false) {
