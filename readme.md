@@ -43,11 +43,11 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
 
 ## Plan
 ### Universal
+- Show presenter's mouse cursor location.
 - Clean up old webgl contexts. Implement the dispose() chain.
 
 ### Title page
-- Moderately impressive..? Viewed from land, NM logo in atmosphere.
-- Something interactive.
+- Big NM logo. Ideally, viewed from land looking up to planetary-scale logo with atmosphere visible.
 
 ### Meshs and vertex shader
 - History of perspective-correct art. Camera obscura.
@@ -72,14 +72,13 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
 - Leonardo's perspective study for The Adoration of the Magi, 1481.
     - 5 years before The Annunciation, but is great for showing the formal construction of perspective.
 
-- The Ambassadors, Holbein, 1533.
-    - Evidence of using a lens.
+- Staircase Demo
+    - From xyz position to screenspace position.
+    - Matrix multiplication of vector.
+    - Mention of 4th component of vector.
+    - Manipulate FoV of camera.
+    - Our virtual camera is a mathematical operation.
 
-- Positions are transformed to screenspace.
-
-- Virtual camera, control over field of view.
-- Idea of vector and matrix operations.
-- Demo of location calculation.
 
 ### Textures and fragment shader
 - UV mapping, paper wrapping analogy.

@@ -1,9 +1,15 @@
+import * as THREE from 'three';
+
 import createPresenterAuth from './presenterAuth.js';
 import buildRouter from './router.js';
+
 import buildScene from './scene.js';
 import buildSceneShop from './sceneShop.js';
+import buildSceneStaircase from './sceneStaircase.js';
+
 import buildModelSand from './modelSand.js';
 import buildModelFluvial from './modelFluvial.js';
+import buildModelStaircase from './modelStaircase.js';
 import buildPinhole from './pinhole.js';
 
 /**
@@ -41,7 +47,12 @@ presenterAuth.addStartFollowingCallback(() => {
 // Make builders available globally so non-bundled JS can access them.
 window.buildScene = buildScene;
 window.buildSceneShop = buildSceneShop;
+window.buildSceneStaircase = buildSceneStaircase;
+
 window.buildModelSand = buildModelSand;
 window.buildModelFluvial = buildModelFluvial;
+window.buildModelStaircase = buildModelStaircase;
 
 window.buildPinhole = buildPinhole;
+
+window.THREE = THREE;

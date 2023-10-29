@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mesh</title>
+<script defer>
+    var scene = window.buildSceneStaircase(
+        document.getElementById('staircase-demo'),
+        1.0,
+    );
+
+    var model = window.buildModelStaircase();
+    model.onReady.addCallback(() => {
+        scene.addModel(model);
+        scene.setFocalLength(24);
+        scene.setDolly(1.7);
+        scene.setOrbit(23.3);
+    });
+
+    var focalInput = document.getElementById('staircase-focal');
+    focalInput.addEventListener('input', (event) => {
+        scene.setFocalLength(event?.target?.value);
+        updateMatrixDisplay();
+    });
+
+    var dollyInput = document.getElementById('staircase-dolly');
+    dollyInput.addEventListener('input', (event) => {
+        scene.setDolly(event?.target?.value ?? 1);
+        updateMatrixDisplay();
+    });
+
+    var orbitInput = document.getElementById('staircase-orbit');
+    orbitInput.addEventListener('input', (event) => {
+        scene.setOrbit(event?.target?.value ?? 180);
+        updateMatrixDisplay();
+    });
+
+    updateMatrixDisplay();
+
+    function updateMatrixDisplay() {
+        const matrix = scene.getCameraMatrix();
+        const matrixTable = document.getElementById('staircase-matrix');
+        const matrixElements = matrixTable.getElementsByTagName('td');
+        for (let i = 0; i < matrixElements.length; i++) {
+            matrixElements[i].innerText = matrix.elements[i].toFixed(2);
+        }
+
+        const inputVector = new THREE.Vector4(1.2, 0.5, 0.3, 1);
+        inputVector.applyMatrix4(matrix);
+
+        const outputTable = document.getElementById('staircase-output');
+        const outputElements = outputTable.getElementsByTagName('td');
+        for (let i = 0; i < outputElements.length; i++) {
+            outputElements[i].innerText = inputVector.getComponent(i).toFixed(2);
+        }
+
+        const dividedTable = document.getElementById('staircase-divided');
+        const dividedElements = dividedTable.getElementsByTagName('td');
+        for (let i = 0; i < dividedElements.length; i++) {
+            dividedElements[i].innerText = (inputVector.getComponent(i) / inputVector.w).toFixed(2);
+        }
+    }
+
+    document.tidyPage = () => {
+        // TODO: Stop listening for presenter events.
+        // TODO: remove becomePresenterCallback and/or startFollowingCallback.
+
+        scene.dispose();
+    };
+</script>
+</head>
+<body>
+    <style>
+        #staircase-wrap {
+            display: flex;
+            position: fixed;
+            top: 186px;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+        }
+        #staircase-demo {
+            flex: 1 0 auto;
+        }
+        #staircase-form {
+            flex: 0 0 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: stretch;
+        }
+        #staircase-form input {
+            display: block;
+            width: 100%;
+        }
+        #staircase-calculation {
+            position: fixed;
+            left: 50px;
+            top: 155px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+        .bar-left, .bar-right {
+            height: 240px;
+            width: 3px;
+            background: #000;
+            position: relative
+        }
+        .bar-left::after, .bar-left::before,
+        .bar-right::after, .bar-right::before {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 3px;
+            background: #000;
+        }
+        .bar-left::before, .bar-right::before {
+            top: 0;
+        }
+        .bar-left::after, .bar-right::after {
+            bottom: 0;
+        }
+        .bar-left::after, .bar-left::before {
+            left: 0;
+        }
+        .bar-right::after, .bar-right::before {
+            right: 0;
+        }
+        #staircase-calculation table {
+            table-layout: fixed;
+            border-collapse: collapse;
+            font-family: monospace;
+        }
+        #staircase-calculation td {
+            width: 130px;
+            text-align: right;
+            padding: 10px 3px;
+        }
+        #staircase-calculation .operator {
+            text-align: center;
+            margin: 0 5px;
+        }
+    </style>
+
+
+    <h1>Vertex Shader</h1>
+    <div id="staircase-wrap">
+        <div id="staircase-form">
+            <label>Focal Length
+                <input type="range" id="staircase-focal" min="3" max="80" value="24">
+            </label>
+            <label>Dolly
+                <input type="range" id="staircase-dolly" min="0.7" max="10" step="0.1" value="1.7">
+            </label>
+            <label>Orbit
+                <input type="range" id="staircase-orbit" min="0" max="360" step="0.1" value="23.3">
+            </label>
+        </div>
+        <div id="staircase-demo"></div>
+    </div>
+    <div id="staircase-calculation">
+        <div class="bar-left"></div>
+        <table id="staircase-matrix">
+            <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+        <div class="bar-right"></div>
+        <div class="operator">⋅</div>
+        <div class="bar-left"></div>
+        <table id="staircase-input">
+            <tr>
+                <td>1.20</td>
+            </tr>
+            <tr>
+                <td>0.50</td>
+            </tr>
+            <tr>
+                <td>0.30</td>
+            </tr>
+            <tr>
+                <td>1.00</td>
+            </tr>
+        </table>
+        <div class="bar-right"></div>
+        <div class="operator">=</div>
+        <div class="bar-left"></div>
+        <table id="staircase-output">
+            <tr>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>-</td>
+            </tr>
+        </table>
+        <div class="bar-right"></div>
+        <div class="operator">div<br>w</div>
+        <div class="bar-left"></div>
+        <table id="staircase-divided">
+            <tr>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>-</td>
+            </tr>
+        </table>
+        <div class="bar-right"></div>
+    </div>
+</body>
+</html>

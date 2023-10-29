@@ -36,6 +36,7 @@ export default function buildCamera(wrapElement, options = {}) {
     cameraControl.minDistance = options.minDistance ?? 0.06;
     cameraControl.enableZoom = options.enableZoom ?? true;
     cameraControl.enablePan = options.enablePan ?? true;
+    cameraControl.enabled = options.controlEnabled ?? true;
 
     // Initial position.
     cameraControl.target.set(

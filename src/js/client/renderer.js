@@ -23,7 +23,7 @@ import createObserver from './observer.js';
  * @param {LocalCamera} localCamera
  * @returns {LocalRenderer}
  */
-export default function buildRenderer(wrapElement, sceneThree, localCamera, toneMap = true) {
+export default function buildRenderer(wrapElement, sceneThree, localCamera, options = {}) {
 
     const onBeforeRender = createObserver();
     const onAfterRender = createObserver();
@@ -42,33 +42,36 @@ export default function buildRenderer(wrapElement, sceneThree, localCamera, tone
     sceneThree.backgroundIntensity = 0.6;
 
     // Prepare post-processing stack.
-    // const composer = null;
-    const composer = new EffectComposer(rendererThree);
-    const renderPass = new RenderPass(
-        sceneThree, localCamera.cameraThree,
-        null, // material override
-        new THREE.Color(0x000000), // clear colour
-        0 // clear alpha
-    );
-    const bloomPass = new UnrealBloomPass(
-        new THREE.Vector2(wrapElement.clientWidth, wrapElement.clientHeight),
-        0.30, // strength
-        0.80, // radius
-        1.80  // threshold
-    );
-    const toneMapPass = new ShaderPass(ACESFilmicToneMappingShader);
-    toneMapPass.uniforms.exposure.value = 2;
+    let composer = null;
 
-    const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
+    if (options.postPass ?? true) {
+        composer = new EffectComposer(rendererThree);
+        const renderPass = new RenderPass(
+            sceneThree, localCamera.cameraThree,
+            null, // material override
+            new THREE.Color(0x000000), // clear colour
+            0 // clear alpha
+        );
+        const bloomPass = new UnrealBloomPass(
+            new THREE.Vector2(wrapElement.clientWidth, wrapElement.clientHeight),
+            0.30, // strength
+            0.80, // radius
+            1.80  // threshold
+        );
+        const toneMapPass = new ShaderPass(ACESFilmicToneMappingShader);
+        toneMapPass.uniforms.exposure.value = 2;
 
-    // (Reminder that the order of passes is very much important.)
-    composer.addPass(renderPass);
-    composer.addPass(bloomPass);
-    if (toneMap) {
-        // Is the tone mapping pass also converting linear to sRGB somehow?
-        composer.addPass(toneMapPass);
-    } else {
-        composer.addPass(gammaCorrectionPass);
+        const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
+
+        // (Reminder that the order of passes is very much important.)
+        composer.addPass(renderPass);
+        composer.addPass(bloomPass);
+        if (options.toneMap ?? true) {
+            // Is the tone mapping pass also converting linear to sRGB somehow?
+            composer.addPass(toneMapPass);
+        } else {
+            composer.addPass(gammaCorrectionPass);
+        }
     }
 
     wrapElement.appendChild(rendererThree.domElement);

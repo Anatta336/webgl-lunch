@@ -24,7 +24,7 @@ import createCamera from './camera.js';
  * @param {HTMLElement} sceneElement
  * @returns {LocalScene}
  */
-export default function buildScene(sceneElement, backgroundColour = 0x9ba5ff, dollyFactor = 1.0) {
+export default function buildScene(sceneElement, dollyFactor = 1.0) {
 
     if (!sceneElement) {
         return null;
@@ -41,19 +41,24 @@ export default function buildScene(sceneElement, backgroundColour = 0x9ba5ff, do
 
     const onReady = createObserver();
 
+    const initialCameraDistance = 3.0;
+    var cameraDistance = initialCameraDistance * 1.0;
+    var cameraDegrees = 180.0;
+
     const camera = createCamera(sceneElement, {
-        maxDistance: 0.20,
-        orbitSpeed: 2.8,
+        maxDistance: 100.0,
+        orbitSpeed: 0.0,
         position: {
-            x: 0.10 * dollyFactor,
-            y: 0.09 * dollyFactor,
-            z: 0 * dollyFactor,
+            x: 0,
+            y: 0,
+            z: -cameraDistance,
         },
-        enableZoom: false,
-        enablePan: false,
+        controlEnabled: false,
+        zNear: 0.01,
+        zFar: 50.0,
     });
     const renderer = createRenderer(sceneElement, sceneThree, camera, {
-        toneMap: false,
+        postPass: false,
     });
 
     // To run code on each render frame, add a callback to the renderer.
@@ -70,8 +75,62 @@ export default function buildScene(sceneElement, backgroundColour = 0x9ba5ff, do
         removeModel,
         onReady,
         sceneThree,
+        setFocalLength,
+        setDolly,
+        setOrbit,
+        getPerspectiveMatrix,
+        getCameraMatrix,
         dispose,
     };
+
+    function setFocalLength(focalLength) {
+        camera.cameraThree.setFocalLength(focalLength);
+    }
+
+    function setDolly(dollyFactor) {
+        cameraDistance = dollyFactor * initialCameraDistance;
+
+        updateCameraPosition();
+    }
+
+    function setOrbit(angleDegrees) {
+        while (angleDegrees < 0.0) {
+            angleDegrees += 360.0;
+        }
+        while (angleDegrees > 360.0) {
+            angleDegrees -= 360.0;
+        }
+
+        cameraDegrees = angleDegrees;
+
+        updateCameraPosition();
+    }
+
+    function updateCameraPosition() {
+        const posX = Math.sin(cameraDegrees * Math.PI / 180.0) * cameraDistance;
+        const posZ = Math.cos(cameraDegrees * Math.PI / 180.0) * cameraDistance;
+
+        camera.cameraThree.position.set(
+            posX,
+            0,
+            posZ
+        );
+    }
+
+    function getPerspectiveMatrix() {
+        return camera.cameraThree.projectionMatrix;
+    }
+
+    function getCameraMatrix() {
+        const combinedMatrices = new THREE.Matrix4();
+
+        combinedMatrices.multiplyMatrices(
+            camera.cameraThree.projectionMatrix,
+            camera.cameraThree.matrixWorldInverse
+        );
+
+        return combinedMatrices;
+    }
 
     function prepareLighting() {
         new RGBELoader().setPath('hdri/').loadAsync('brown_photostudio_05_1k.hdr')
@@ -79,8 +138,8 @@ export default function buildScene(sceneElement, backgroundColour = 0x9ba5ff, do
             texture.mapping = THREE.EquirectangularReflectionMapping;
             hdri = texture;
 
-            // Background to colour matching site.
-            sceneThree.background = new THREE.Color(backgroundColour);
+            // Transparent background.
+            sceneThree.background = null;
 
             // Use HDRI for image-based lighting.
             sceneThree.environment = hdri;
