@@ -33,10 +33,20 @@ export default function buildModel() {
 
     return {
         onReady,
+        setWireframe,
         addToScene,
         removeFromScene,
         dispose,
     };
+
+    function setWireframe(value) {
+        if (meshThreeStaircaseA) {
+            meshThreeStaircaseA.material.wireframe = !!value;
+        }
+        if (meshThreeStaircaseB) {
+            meshThreeStaircaseB.material.wireframe = !!value;
+        }
+    }
 
     function prepareGeometry() {
         const glftLoader = new GLTFLoader();

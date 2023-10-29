@@ -35,6 +35,11 @@
         updateMatrixDisplay();
     });
 
+    var wireframeInput = document.getElementById('staircase-wireframe');
+    wireframeInput.addEventListener('change', (event) => {
+        model.setWireframe(event?.target?.checked ?? false);
+    });
+
     updateMatrixDisplay();
 
     function updateMatrixDisplay() {
@@ -89,7 +94,7 @@
             justify-content: center;
             align-items: stretch;
         }
-        #staircase-form input {
+        #staircase-form input[type="range"] {
             display: block;
             width: 100%;
         }
@@ -156,6 +161,9 @@
             </label>
             <label>Orbit
                 <input type="range" id="staircase-orbit" min="0" max="360" step="0.1" value="23.3">
+            </label>
+            <label style="display:flex; flex-direction:row; align-items:center;">Wireframe
+                <input type="checkbox" id="staircase-wireframe" style="width:30px; height:30px;">
             </label>
         </div>
         <div id="staircase-demo"></div>
