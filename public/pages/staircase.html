@@ -20,27 +20,72 @@
     var focalInput = document.getElementById('staircase-focal');
     focalInput.addEventListener('input', (event) => {
         scene.setFocalLength(event?.target?.value);
+        broadcastState();
         updateMatrixDisplay();
     });
 
     var dollyInput = document.getElementById('staircase-dolly');
     dollyInput.addEventListener('input', (event) => {
         scene.setDolly(event?.target?.value ?? 1);
+        broadcastState();
         updateMatrixDisplay();
     });
 
     var orbitInput = document.getElementById('staircase-orbit');
     orbitInput.addEventListener('input', (event) => {
         scene.setOrbit(event?.target?.value ?? 180);
+        broadcastState();
         updateMatrixDisplay();
     });
 
     var wireframeInput = document.getElementById('staircase-wireframe');
     wireframeInput.addEventListener('change', (event) => {
         model.setWireframe(event?.target?.checked ?? false);
+        broadcastState();
     });
 
     updateMatrixDisplay();
+
+    socket.on('staircase', (values) => {
+        if (!(presenterAuth?.isFollowingPresenter() ?? true)) {
+                // Not following presenter, so ignore the message.
+                return;
+            }
+        updateLocalState(values);
+    });
+
+    presenterAuth.addBecomePresenterCallback(broadcastState);
+    presenterAuth.addStartFollowingCallback(requestPresenterState);
+
+    if (presenterAuth?.isFollowingPresenter() ?? false) {
+        // As we've just arrived on the page, ask the server what the state is.
+        requestPresenterState();
+    }
+
+    function updateLocalState(values) {
+        focalInput.value = values.focalLength;
+        dollyInput.value = values.dolly;
+        orbitInput.value = values.orbit;
+        wireframeInput.checked = values.wireframe;
+        scene.setFocalLength(values.focalLength);
+        scene.setDolly(values.dolly);
+        scene.setOrbit(values.orbit);
+        model.setWireframe(values.wireframe);
+        updateMatrixDisplay();
+    }
+
+    function broadcastState() {
+        socket.emit('staircase-set', {
+            focalLength: focalInput.value,
+            dolly: dollyInput.value,
+            orbit: orbitInput.value,
+            wireframe: wireframeInput.checked,
+        });
+    }
+
+    function requestPresenterState() {
+        socket.emit('staircase-get');
+    }
 
     function updateMatrixDisplay() {
         const matrix = scene.getCameraMatrix();
@@ -157,7 +202,7 @@
                 <input type="range" id="staircase-focal" min="3" max="80" value="24">
             </label>
             <label>Dolly
-                <input type="range" id="staircase-dolly" min="0.7" max="10" step="0.1" value="1.7">
+                <input type="range" id="staircase-dolly" min="0.7" max="5" step="0.1" value="1.7">
             </label>
             <label>Orbit
                 <input type="range" id="staircase-orbit" min="0" max="360" step="0.1" value="23.3">
