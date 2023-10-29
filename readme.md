@@ -58,6 +58,23 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
     - Apparent length of edges radically different on screen. This is foreshortening.
     - Projection removes a dimension. In this diagram 2 to 1. We'll be looking at 3 to 2.
 
+- Roman perspective
+    - Frescos from villa of Fannius Synistor.
+    - Built 40 to 30 BCE.
+    - Buried by the eruption of Mount Vesuvius (also responsible for Pompeii)
+    - An understanding of perspective, but seems not to be rigorous.
+
+- "The Annunciation, with Saint Emidius" 1486
+    - Carlo Crivelli
+    - Clearly application of a formal system of perspective
+    - Still getting details wrong.
+
+- Leonardo's perspective study for The Adoration of the Magi, 1481.
+    - 5 years before The Annunciation, but is great for showing the formal construction of perspective.
+
+- The Ambassadors, Holbein, 1533.
+    - Evidence of using a lens.
+
 - Positions are transformed to screenspace.
 
 - Virtual camera, control over field of view.
