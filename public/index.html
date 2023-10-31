@@ -125,10 +125,16 @@
         mousePosition.x = event.clientX;
         mousePosition.y = event.clientY;
 
+        if (presenterAuth?.isPresenterLocal()) {
+            // I am the presenter, so make the local pointer follow me.
+            pointer.style.left = mousePosition.x + 'px';
+            pointer.style.top = mousePosition.y + 'px';
+        }
+
         broadcastPointer();
     });
 
-    presenterAuth?.addBecomePresenterCallback(broadcastPointer);
+    presenterAuth?.addBecomePresenterCallback(onBeginPresenting);
     presenterAuth?.addStartFollowingCallback(requestPresenterState);
 
     socket.on('pointer', (position) => {
@@ -141,6 +147,19 @@
         pointer.style.left = (position.x * document.documentElement.clientWidth) + 'px';
         pointer.style.top = (position.y * document.documentElement.clientHeight) + 'px';
     });
+
+    function onBeginPresenting() {
+        pointer.classList.remove('hidden');
+        document.documentElement.style.cursor = 'none';
+
+        broadcastPointer();
+    }
+
+    function onBeginFollowing() {
+        pointer.classList.remove('hidden');
+        document.documentElement.style.cursor = 'default';
+    }
+
 
     function broadcastPointer() {
         if (!presenterAuth?.isPresenterLocal()) {
