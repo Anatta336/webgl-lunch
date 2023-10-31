@@ -113,7 +113,7 @@
 
     document.tidyPage = () => {
         socket?.off('staircase');
-        presenterAuth?.removeBecomePresenterCallback(broadcastLightState);
+        presenterAuth?.removeBecomePresenterCallback(broadcastState);
         presenterAuth?.removeStartFollowingCallback(requestPresenterState);
 
         scene?.dispose();

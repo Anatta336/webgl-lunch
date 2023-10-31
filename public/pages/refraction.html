@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mesh</title>
+<script defer>
+    var scene = window.buildSceneRefraction(document.getElementById('refraction-scene'));
+
+    document.tidyPage = () => {
+        // socket?.off('texture');
+
+        // presenterAuth?.removeBecomePresenterCallback(broadcastState);
+        // presenterAuth?.removeStartFollowingCallback(requestPresenterState);
+
+        // scene?.dispose();
+    };
+</script>
+</head>
+<body>
+    <style>
+        #refraction-scene {
+            width: 100%;
+            height: calc(100vh - 206px);
+        }
+    </style>
+
+    <h1>Refraction</h1>
+
+    <div id="refraction-scene"></div>
+</body>
+</html>

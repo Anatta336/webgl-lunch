@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Mesh</title>
 <script defer>
-    var scene = window.buildSceneTexture(document.getElementById('texture-one-scene'));
+    var scene = window.buildSceneTexture(document.getElementById('texture-scene'));
 
     var model = window.buildModelFluvial();
     model.onReady.addCallback(() => {
@@ -124,7 +124,7 @@
             width: 100%;
             height: calc(100vh - (186px + 60px));
         }
-        #texture-one-scene {
+        #texture-scene {
             flex: 1 1 auto;
         }
         .right-side {
@@ -167,7 +167,7 @@
 
     <h1>Texturing</h1>
     <div class="outer-wrap">
-        <div id="texture-one-scene"></div>
+        <div id="texture-scene"></div>
         <div class="right-side">
             <div class="controls">
                 <div class="column">

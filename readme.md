@@ -87,6 +87,10 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
 - Image split up into pixels, each calculated individually.
 - Show a per-channel view of the textures. Explain normal as "what would be lit up".
 
+"the parts of the members which face each
+other steep each other in the tone of their surface."
+https://www.discoveringdavinci.com/light-shade-1
+
 ### Lighting
 - Some discussion of HDR values for colours.
 - Show example of image based lighting vs directional light.
