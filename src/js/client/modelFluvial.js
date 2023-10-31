@@ -19,6 +19,13 @@ export default function buildModel() {
     const geometry = {};
     const material = {};
 
+    const textureSet = {};
+
+    let usePaintedTexture = false;
+    let useBaseColour = true;
+    let useNormalMap = true;
+    let useOrmMap = true;
+
     let geometryReady = false;
     let materialReady = false;
 
@@ -36,8 +43,69 @@ export default function buildModel() {
         onReady,
         addToScene,
         removeFromScene,
+        setBaseColour,
+        setNormalMap,
+        setOrmMap,
+        setFlatShading,
+        setPainted,
         dispose,
     };
+
+    function setBaseColour(enabled) {
+        useBaseColour = enabled;
+        updateMaps();
+    }
+
+    function setNormalMap(enabled) {
+        useNormalMap = enabled;
+        updateMaps();
+    }
+
+    function setOrmMap(enabled) {
+        useOrmMap = enabled;
+        updateMaps();
+    }
+
+    function setPainted(enabled) {
+        usePaintedTexture = enabled;
+        updateMaps();
+    }
+
+    function updateMaps() {
+        const textures = usePaintedTexture
+            ? textureSet['fluvial-painted']
+            : textureSet['fluvial'];
+
+        material.fluvial.map = useBaseColour
+            ? textures.baseColour
+            : null;
+
+        material.fluvial.normalMap = useNormalMap
+            ? textures.normal
+            : null;
+
+        if (useOrmMap) {
+            material.fluvial.aoMap = textures.orm;
+            material.fluvial.roughnessMap = textures.orm;
+            material.fluvial.metalnessMap = textures.orm;
+            material.fluvial.roughness = 1.0;
+            material.fluvial.metalness = 1.0;
+        } else {
+            material.fluvial.aoMap = null;
+            material.fluvial.roughnessMap = null;
+            material.fluvial.metalnessMap = null;
+            material.fluvial.roughness = 0.02;
+            material.fluvial.metalness = 0.7;
+        }
+
+        meshFluvial.material.needsUpdate = true;
+    }
+
+    function setFlatShading(enabled) {
+        material.fluvial.flatShading = enabled;
+
+        meshFluvial.material.needsUpdate = true;
+    }
 
     function prepareGeometry() {
         const glftLoader = new GLTFLoader();
@@ -63,6 +131,7 @@ export default function buildModel() {
         // Parallel load all textures.
         Promise.all([
             ...loadTextureSet(material.fluvial, 'fluvial', textureLoader),
+            ...loadTextureSet(null, 'fluvial-painted', textureLoader),
         ]).then(() => {
             materialReady = true;
             checkReady();
@@ -71,12 +140,20 @@ export default function buildModel() {
 
     // TODO: share this and other functions with modelSand.js
     function loadTextureSet(material, fileName, textureLoader = new THREE.TextureLoader()) {
+
+        textureSet[fileName] = {};
+
         return [
             textureLoader.loadAsync(`textures/${fileName}_baseColor.webp`)
             .then((baseColour) => {
                 baseColour.flipY = false;
                 baseColour.colorSpace = THREE.SRGBColorSpace;
-                material.map = baseColour;
+
+                textureSet[fileName].baseColour = baseColour;
+
+                if (material) {
+                    material.map = baseColour;
+                }
             })
             .catch(console.error),
 
@@ -84,7 +161,12 @@ export default function buildModel() {
             .then((normal) => {
                 normal.flipY = false;
                 normal.colorSpace = THREE.NoColorSpace;
-                material.normalMap = normal;
+
+                textureSet[fileName].normal = normal;
+
+                if (material) {
+                    material.normalMap = normal;
+                }
             })
             .catch(console.error),
 
@@ -92,15 +174,17 @@ export default function buildModel() {
             .then((occulsionRoughnessMetallic) => {
                 occulsionRoughnessMetallic.flipY = false;
                 occulsionRoughnessMetallic.colorSpace = THREE.NoColorSpace;
-                material.metalness = 1.0;
-                material.roughness = 1.0;
-                material.aoMap           = occulsionRoughnessMetallic;
-                material.roughnessMap    = occulsionRoughnessMetallic;
-                material.metalnessMap    = occulsionRoughnessMetallic;
-                material.envMapIntensity = 1.0;
 
-                // material.flatShading = true;
-                // material.wireframe = true;
+                textureSet[fileName].orm = occulsionRoughnessMetallic;
+
+                if (material) {
+                    material.metalness = 1.0;
+                    material.roughness = 1.0;
+                    material.aoMap           = occulsionRoughnessMetallic;
+                    material.roughnessMap    = occulsionRoughnessMetallic;
+                    material.metalnessMap    = occulsionRoughnessMetallic;
+                    material.envMapIntensity = 1.0;
+                }
             })
             .catch(console.error),
         ];

@@ -85,9 +85,11 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
 - Painting to a model.
 - Idea of non-colour data in textures.
 - Image split up into pixels, each calculated individually.
-- Demo of pixel colour calculation.
 - Show a per-channel view of the textures. Explain normal as "what would be lit up".
+
+### Lighting
 - Some discussion of HDR values for colours.
+- Show example of image based lighting vs directional light.
 
 ### Specialised hardware
 - Highly parallel.
@@ -103,7 +105,6 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
 ## Would nice
 - Expand sync system to allow per-user data so other users can broadcast without overwriting presenter's.
 - Use above for "multiplayer" experience.
-- Show example of light mapping vs directional light.
 
 ## Colour management
 https://discourse.threejs.org/t/updates-to-color-management-in-three-js-r152/50791

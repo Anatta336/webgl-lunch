@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mesh</title>
+<script defer>
+    var scene = window.buildSceneTexture(document.getElementById('texture-one-scene'));
+
+    var model = window.buildModelFluvial();
+    model.onReady.addCallback(() => {
+        model.setFlatShading(true);
+        model.setBaseColour(false);
+        model.setNormalMap(false);
+        model.setOrmMap(false);
+
+        scene.addModel(model);
+    });
+
+    var flatInput = document.getElementById('flat');
+    flatInput.addEventListener('change', (event) => {
+        model.setFlatShading(!(event?.target?.checked ?? false));
+    });
+
+    var colourInput = document.getElementById('colour');
+    colourInput.addEventListener('change', (event) => {
+        model.setBaseColour(event?.target?.checked ?? false);
+    });
+
+    var normalInput = document.getElementById('normal');
+    normalInput.addEventListener('change', (event) => {
+        model.setNormalMap(event?.target?.checked ?? false);
+    });
+
+    var ormInput = document.getElementById('orm');
+    ormInput.addEventListener('change', (event) => {
+        model.setOrmMap(event?.target?.checked ?? false);
+    });
+
+    var paintedInput = document.getElementById('painted');
+    paintedInput.addEventListener('change', (event) => {
+        model.setPainted(event?.target?.checked ?? false);
+
+        updateTextureDisplay();
+    });
+
+    var textureSelect = document.getElementById('texture-select');
+    var textureImg = document.getElementById('texture-display');
+    textureSelect.addEventListener('change', (event) => {
+        updateTextureDisplay();
+    });
+
+    function updateTextureDisplay() {
+        const prefix = paintedInput.checked ? 'fluvial-painted' : 'fluvial';
+
+        textureImg.src = `textures/${prefix}_${textureSelect.value}.webp`;
+    }
+
+    document.tidyPage = () => {
+        // TODO: Stop listening for presenter events.
+        // TODO: remove becomePresenterCallback and/or startFollowingCallback.
+
+        scene.dispose();
+    };
+</script>
+</head>
+<body>
+    <style>
+        .outer-wrap {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            width: 100%;
+            height: calc(100vh - (186px + 60px));
+        }
+        #texture-one-scene {
+            flex: 1 1 auto;
+        }
+        .right-side {
+            flex: 0 0 600px;
+            padding-left: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .controls {
+            display: flex;
+            flex-direction: row;
+            flex: 0 0 auto;
+        }
+        .controls .column {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: stretch;
+            flex: 1 0 auto;
+        }
+        select {
+            font-size: 2rem;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        input[type=checkbox] {
+            width: 30px;
+            height: 30px;
+        }
+        #img-wrap {
+            flex: 1 1 auto;
+            position: relative;
+            width: 100%;
+        }
+        #img-wrap img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+
+    <h1>Texturing</h1>
+    <div class="outer-wrap">
+        <div id="texture-one-scene"></div>
+        <div class="right-side">
+            <div class="controls">
+                <div class="column">
+                    <label style="display:flex; flex-direction:row; align-items:center;">
+                        <input type="checkbox" id="flat">
+                        Vertex Normals
+                    </label>
+                    <label style="display:flex; flex-direction:row; align-items:center;">
+                        <input type="checkbox" id="colour">
+                        Base Colour
+                    </label>
+                    <label style="display:flex; flex-direction:row; align-items:center;">
+                        <input type="checkbox" id="normal">
+                        Normal Map
+                    </label>
+                    <label style="display:flex; flex-direction:row; align-items:center;">
+                        <input type="checkbox" id="orm">
+                        ORM Map
+                    </label>
+                    <label style="display:flex; flex-direction:row; align-items:center;">
+                        <input type="checkbox" id="painted">
+                        Painted Version
+                    </label>
+                </div>
+                <div class="column">
+                    <select id="texture-select">
+                        <option value="baseColor">Base Colour</option>
+                        <option value="normal">Normal Map</option>
+                        <option value="occlusion">Occlusion Map</option>
+                        <option value="roughness">Roughness Map</option>
+                        <option value="metallic">Metallic Map</option>
+                    </select>
+                </div>
+            </div>
+            <div id="img-wrap">
+                <img id="texture-display" src="textures/fluvial_baseColor.webp">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

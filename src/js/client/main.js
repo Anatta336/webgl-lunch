@@ -6,6 +6,7 @@ import buildRouter from './router.js';
 import buildScene from './scene.js';
 import buildSceneShop from './sceneShop.js';
 import buildSceneStaircase from './sceneStaircase.js';
+import buildSceneTexture from './sceneTexture.js';
 
 import buildModelSand from './modelSand.js';
 import buildModelFluvial from './modelFluvial.js';
@@ -48,6 +49,7 @@ presenterAuth.addStartFollowingCallback(() => {
 window.buildScene = buildScene;
 window.buildSceneShop = buildSceneShop;
 window.buildSceneStaircase = buildSceneStaircase;
+window.buildSceneTexture = buildSceneTexture;
 
 window.buildModelSand = buildModelSand;
 window.buildModelFluvial = buildModelFluvial;
