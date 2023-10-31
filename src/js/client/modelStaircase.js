@@ -133,6 +133,11 @@ export default function buildModel() {
     }
 
     function dispose() {
-        // TODO
+        geometry.staircase?.dispose();
+
+        material.plain?.dispose();
+
+        meshThreeStaircaseA?.dispose();
+        meshThreeStaircaseA?.dispose();
     }
 }

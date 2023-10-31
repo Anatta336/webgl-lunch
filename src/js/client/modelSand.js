@@ -177,6 +177,20 @@ export default function buildModel() {
     }
 
     function dispose() {
-        // TODO
+        geometry.bulbHold?.dispose();
+        geometry.handle?.dispose();
+
+        material.bulbHold?.map?.dispose();
+        material.bulbHold?.normalMap?.dispose();
+        material.bulbHold?.aoMap?.dispose();
+        material.bulbHold?.dispose();
+
+        material.handle?.map?.dispose();
+        material.handle?.normalMap?.dispose();
+        material.handle?.aoMap?.dispose();
+        material.handle?.dispose();
+
+        meshFluvial.dispose();
+        meshTap.dispose();
     }
 }

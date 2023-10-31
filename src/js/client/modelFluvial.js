@@ -259,6 +259,20 @@ export default function buildModel() {
     }
 
     function dispose() {
-        // TODO
+        geometry.fluvial?.dispose();
+        geometry.tap?.dispose();
+
+        material.fluvial?.dispose();
+
+        textureSet['fluvial']?.baseColour?.dispose();
+        textureSet['fluvial']?.normal?.dispose();
+        textureSet['fluvial']?.orm?.dispose();
+
+        textureSet['fluvial-painted']?.baseColour?.dispose();
+        textureSet['fluvial-painted']?.normal?.dispose();
+        textureSet['fluvial-painted']?.orm?.dispose();
+
+        meshFluvial.dispose();
+        meshTap.dispose();
     }
 }

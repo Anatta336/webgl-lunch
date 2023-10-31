@@ -102,7 +102,10 @@ export default function buildScene(sceneElement) {
 
 
     function dispose() {
-        // TODO
+        models.forEach((model) => {
+            model.dispose();
+        });
+        sceneThree.dispose();
     }
 
     /**
