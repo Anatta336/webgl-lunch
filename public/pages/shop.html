@@ -75,6 +75,7 @@
     document.tidyPage = () => {
         socket?.off('shop-size');
         presenterAuth?.removeBecomePresenterCallback(broadcastShopState);
+        presenterAuth?.removeStartFollowingCallback(requestPresenterShopState);
 
         resizeObserver?.disconnect();
 

@@ -112,10 +112,11 @@
     }
 
     document.tidyPage = () => {
-        // TODO: Stop listening for presenter events.
-        // TODO: remove becomePresenterCallback and/or startFollowingCallback.
+        socket?.off('staircase');
+        presenterAuth?.removeBecomePresenterCallback(broadcastLightState);
+        presenterAuth?.removeStartFollowingCallback(requestPresenterState);
 
-        scene.dispose();
+        scene?.dispose();
     };
 </script>
 </head>
