@@ -37,6 +37,19 @@
             -webkit-font-feature-settings: 'liga';
             -webkit-font-smoothing: antialiased;
         }
+
+        #pointer {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        #pointer img {
+            position: relative;
+            left: -16px;
+            top: -16px;
+            width: 32px;
+            height: 32px;
+        }
     </style>
 
     <link rel="stylesheet" href="style.css">
@@ -67,8 +80,8 @@
         <div data-route="blender-low">Blender Low</div>
         <div data-route="painter">Painter</div>
 
-        <div data-route="la-belle">Ferronière</div>
         <div data-route="light-face">Face</div>
+        <div data-route="la-belle">Ferronière</div>
         <!-- TODO -->
         <!-- spherical harmonics -->
         <!-- exposure control on background -->
@@ -90,6 +103,11 @@
         </form>
     </div>
 
+    <div id="pointer" class="hidden">
+        <img src="images/pointer.png">
+    </div>
+
+
     <div id="content"></div>
 </body>
 
@@ -99,5 +117,45 @@
     document.getElementById('menu-icon').addEventListener('click', () => {
         document.getElementsByTagName('nav')[0]?.classList.toggle('hidden');
     });
+
+    var pointer = document.getElementById('pointer');
+    var mousePosition = { x: 0, y: 0 };
+
+    window.addEventListener('mousemove', (event) => {
+        mousePosition.x = event.clientX;
+        mousePosition.y = event.clientY;
+
+        broadcastPointer();
+    });
+
+    presenterAuth?.addBecomePresenterCallback(broadcastPointer);
+    presenterAuth?.addStartFollowingCallback(requestPresenterState);
+
+    socket.on('pointer', (position) => {
+        if (!(presenterAuth?.isFollowingPresenter() ?? true)) {
+            // Not following presenter, so ignore the message.
+            return;
+        }
+
+        pointer.classList.remove('hidden');
+        pointer.style.left = (position.x * document.documentElement.clientWidth) + 'px';
+        pointer.style.top = (position.y * document.documentElement.clientHeight) + 'px';
+    });
+
+    function broadcastPointer() {
+        if (!presenterAuth?.isPresenterLocal()) {
+            // Not presenter, so don't waste bandwidth.
+            return;
+        }
+
+        socket.emit('pointer-set', {
+            x: mousePosition.x / document.documentElement.clientWidth,
+            y: mousePosition.y / document.documentElement.clientHeight,
+        });
+    }
+
+    function requestPresenterState() {
+        socket.emit('pointer-get');
+    }
 </script>
 </html>

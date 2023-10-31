@@ -13,6 +13,8 @@ nav {
     background: radial-gradient(farthest-corner at 20% 00%, #6fb2dbeb 0%, #ffdbf600 90%), radial-gradient(farthest-corner at 10% 90%, #7478ff 0%, #8f09a7 100%);
     padding: 10px;
     justify-content: center;
+
+    z-index: 400;
 }
 
 [data-route] {

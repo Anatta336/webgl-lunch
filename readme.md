@@ -42,9 +42,6 @@ The static files are served through nginx. Which is also run as a systemd servic
 The password for accessing "presenter mode" is stored in `/etc/environment` as `SOCKET_PRESENTER_PASSWORD`.
 
 ## Plan
-### Universal
-- Show presenter's mouse cursor location.
-- Clean up old webgl contexts. Implement the dispose() chain.
 
 ### Title page
 - Big NM logo. Ideally, viewed from land looking up to planetary-scale logo with atmosphere visible.
@@ -81,11 +78,12 @@ The password for accessing "presenter mode" is stored in `/etc/environment` as `
 
 
 ### Textures and fragment shader
-- UV mapping, paper wrapping analogy.
-- Painting to a model.
 - Idea of non-colour data in textures.
 - Image split up into pixels, each calculated individually.
 - Show a per-channel view of the textures. Explain normal as "what would be lit up".
+- UV mapping, paper wrapping analogy.
+
+La Belle c.1490-1496
 
 "the parts of the members which face each
 other steep each other in the tone of their surface."
