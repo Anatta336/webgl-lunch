@@ -60,6 +60,17 @@
         requestPresenterShopState();
     }
 
+    // Expand shop item when clicked.
+    document.querySelectorAll('.scene').forEach((item) => {
+        item.addEventListener('click', (event) => {
+            const { target } = event;
+            if (!(target instanceof HTMLElement)) {
+                return;
+            }
+            target.classList.toggle('expanded');
+        });
+    });
+
     // When leaving this page, tidy up.
     document.tidyPage = () => {
         socket?.off('shop-size');
@@ -100,6 +111,9 @@
     padding: 15px;
 
     font-family: 'Ruthie', cursive;
+
+    /* Anchor for when scenes are expanded */
+    position: relative;
 }
 
 .shop-grid {
@@ -130,6 +144,14 @@
     width: 100%;
     height: 380px;
     background: #9fa6fb;
+}
+
+.scene.expanded {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
 }
 
 </style>
