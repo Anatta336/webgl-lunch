@@ -19,21 +19,25 @@
     var flatInput = document.getElementById('flat');
     flatInput.addEventListener('change', (event) => {
         model.setFlatShading(!(event?.target?.checked ?? false));
+        broadcastState();
     });
 
     var colourInput = document.getElementById('colour');
     colourInput.addEventListener('change', (event) => {
         model.setBaseColour(event?.target?.checked ?? false);
+        broadcastState();
     });
 
     var normalInput = document.getElementById('normal');
     normalInput.addEventListener('change', (event) => {
         model.setNormalMap(event?.target?.checked ?? false);
+        broadcastState();
     });
 
     var ormInput = document.getElementById('orm');
     ormInput.addEventListener('change', (event) => {
         model.setOrmMap(event?.target?.checked ?? false);
+        broadcastState();
     });
 
     var paintedInput = document.getElementById('painted');
@@ -41,13 +45,58 @@
         model.setPainted(event?.target?.checked ?? false);
 
         updateTextureDisplay();
+        broadcastState();
     });
 
     var textureSelect = document.getElementById('texture-select');
     var textureImg = document.getElementById('texture-display');
     textureSelect.addEventListener('change', (event) => {
         updateTextureDisplay();
+        broadcastState();
     });
+
+    presenterAuth.addBecomePresenterCallback(broadcastState);
+    presenterAuth.addStartFollowingCallback(requestPresenterState);
+
+    socket.on('texture', (values) => {
+        if (!(presenterAuth?.isFollowingPresenter() ?? true)) {
+                // Not following presenter, so ignore the message.
+                return;
+            }
+        updateLocalState(values);
+    });
+
+    function updateLocalState(values) {
+        flatInput.checked = values.flat;
+        colourInput.checked = values.colour;
+        normalInput.checked = values.normal;
+        ormInput.checked = values.orm;
+        paintedInput.checked = values.painted;
+        textureSelect.value = values.texture;
+
+        model.setFlatShading(!values.flat);
+        model.setBaseColour(values.colour);
+        model.setNormalMap(values.normal);
+        model.setOrmMap(values.orm);
+        model.setPainted(values.painted);
+
+        updateTextureDisplay();
+    }
+
+    function broadcastState() {
+        socket?.emit('texture-set', {
+            flat: flatInput.checked,
+            colour: colourInput.checked,
+            normal: normalInput.checked,
+            orm: ormInput.checked,
+            painted: paintedInput.checked,
+            texture: textureSelect.value,
+        });
+    }
+
+    function requestPresenterState() {
+        socket.emit('texture-get');
+    }
 
     function updateTextureDisplay() {
         const prefix = paintedInput.checked ? 'fluvial-painted' : 'fluvial';
@@ -56,10 +105,12 @@
     }
 
     document.tidyPage = () => {
-        // TODO: Stop listening for presenter events.
-        // TODO: remove becomePresenterCallback and/or startFollowingCallback.
+        socket?.off('texture');
 
-        scene.dispose();
+        presenterAuth?.removeBecomePresenterCallback(broadcastState);
+        presenterAuth?.removeStartFollowingCallback(requestPresenterState);
+
+        scene?.dispose();
     };
 </script>
 </head>
