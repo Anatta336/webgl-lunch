@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calibration</title>
+
+    <script>
+        var calibrateElement = document.getElementById('calibration');
+        var selfElement = document.getElementById('calibrate-current');
+        var presenterElement = document.getElementById('calibrate-presenter');
+
+        var currentWidth = 0;
+        var currentHeight = 0;
+
+        var resizeObserver = new ResizeObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.target != calibrateElement) {
+                    // Nothing to do.
+                    return;
+                }
+                currentWidth = entry.contentRect.width;
+                currentHeight = entry.contentRect.height;
+
+                selfElement.innerText = `${currentWidth.toFixed(1)} x ${currentHeight.toFixed(1)}`;
+
+                if (presenterAuth?.isPresenterLocal() ?? false) {
+                    broadcastState();
+                }
+            });
+        });
+        resizeObserver.observe(calibrateElement);
+
+        presenterAuth.addBecomePresenterCallback(broadcastState);
+        presenterAuth.addStartFollowingCallback(requestPresenterState);
+
+        socket.on('calibrate', (values) => {
+            if (!(presenterAuth?.isFollowingPresenter() ?? true)) {
+                // Not following presenter, so ignore the message.
+                return;
+            }
+            updateLocalState(values);
+        });
+
+        function updateLocalState(values) {
+            presenterElement.innerText = `${values.width.toFixed(1)} x ${values.height.toFixed(1)}`;
+        }
+
+        function broadcastState() {
+            socket?.emit('calibrate-set', {
+                width: currentWidth,
+                height: currentHeight,
+            });
+        }
+
+        function requestPresenterState() {
+            socket.emit('calibrate-get');
+        }
+
+        document.tidyPage = () => {
+            socket?.off('calibrate');
+
+            resizeObserver.disconnect();
+
+            presenterAuth?.removeBecomePresenterCallback(broadcastState);
+            presenterAuth?.removeStartFollowingCallback(requestPresenterState);
+        };
+    </script>
+</head>
+<body>
+    <style>
+        #calibration {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+        }
+    </style>
+
+    <div id="calibration">
+        <p>Current: <span id="calibrate-current">- x -</span></p>
+        <p>Presenter: <span id="calibrate-presenter">- x - </span></p>
+        <p>Expected: 2048.0 x 1152.0</p>
+    </div>
+</body>
+</html>
