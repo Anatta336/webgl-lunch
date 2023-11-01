@@ -7,12 +7,8 @@
     var scene = window.buildSceneRefraction(document.getElementById('refraction-scene'));
 
     document.tidyPage = () => {
-        // socket?.off('texture');
-
-        // presenterAuth?.removeBecomePresenterCallback(broadcastState);
-        // presenterAuth?.removeStartFollowingCallback(requestPresenterState);
-
-        // scene?.dispose();
+        if (scene?.dispose) scene?.dispose();
+        scene = null;
     };
 </script>
 </head>

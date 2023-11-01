@@ -79,8 +79,11 @@
 
         resizeObserver?.disconnect();
 
-        fluvialScene?.dispose();
-        bulbScene?.dispose();
+        if (fluvialScene?.dispose) fluvialScene?.dispose();
+        if (bulbScene?.dispose) bulbScene?.dispose();
+
+        fluvialScene = null;
+        bulbScene = null;
     };
 
     function broadcastShopState() {

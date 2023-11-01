@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mesh</title>
+<script defer>
+    var scene = window.buildSceneTitle(
+        document.getElementById('title-scene'),
+        1.0,
+    );
+
+    var model = window.buildModelTitle();
+    model.onReady.addCallback(() => {
+        scene.addModel(model);
+    });
+
+    document.tidyPage = () => {
+        scene?.dispose();
+        scene = null;
+    };
+</script>
+</head>
+<body>
+    <style>
+        #title-scene {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <div id="title-scene"></div>
+</body>
+</html>

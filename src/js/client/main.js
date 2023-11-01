@@ -8,10 +8,13 @@ import buildSceneShop from './sceneShop.js';
 import buildSceneStaircase from './sceneStaircase.js';
 import buildSceneTexture from './sceneTexture.js';
 import buildSceneRefraction from './sceneRefraction.js';
+import buildSceneTitle from './sceneTitle.js';
 
 import buildModelSand from './modelSand.js';
 import buildModelFluvial from './modelFluvial.js';
 import buildModelStaircase from './modelStaircase.js';
+import buildModelTitle from './modelTitle.js';
+
 import buildPinhole from './pinhole.js';
 
 /**
@@ -52,10 +55,12 @@ window.buildSceneShop = buildSceneShop;
 window.buildSceneStaircase = buildSceneStaircase;
 window.buildSceneTexture = buildSceneTexture;
 window.buildSceneRefraction = buildSceneRefraction;
+window.buildSceneTitle = buildSceneTitle;
 
 window.buildModelSand = buildModelSand;
 window.buildModelFluvial = buildModelFluvial;
 window.buildModelStaircase = buildModelStaircase;
+window.buildModelTitle = buildModelTitle;
 
 window.buildPinhole = buildPinhole;
 

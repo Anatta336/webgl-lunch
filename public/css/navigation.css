@@ -14,7 +14,7 @@ nav {
     padding: 10px;
     justify-content: center;
 
-    z-index: 400;
+    z-index: 1;
 }
 
 [data-route] {
