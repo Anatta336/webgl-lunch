@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vertices</title>
+</head>
+<body>
+    <style>
+    #vertices-wrap {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 20px;
+        max-height: calc(100vh - 206px);
+    }
+    #flatten-left {
+        flex: 1 0 500px;
+    }
+    #flatten-right {
+        flex: 0 1 auto;
+    }
+    </style>
+
+    <h1>Perspective 1486</h1>
+    <div id="vertices-wrap">
+        <div id="vertices-left">
+            <p>A mesh is made up of:</p>
+            <p><b>Vertices</b> - points in space</p>
+            <p><b>Edges</b> - connections between vertices</p>
+            <p><b>Faces</b> - a set of edges that form a surface</p>
+            <p>Faces end up being broken down into triangles.
+        </div>
+        <img id="vertices-right" src="images/vertices-coloured.png">
+    </div>
+</body>
+</html>
