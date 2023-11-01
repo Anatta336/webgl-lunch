@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lighting</title>
+<script defer>
+    var scene = window.buildSceneLight(document.getElementById('light-scene'));
+
+    var model = window.buildModelFluvial();
+    model.onReady.addCallback(() => {
+        scene.addModel(model);
+
+        scene.setDirectionalLight(true);
+        scene.setBackground(false);
+    });
+
+    var directionalInput = document.getElementById('light-directional');
+    directionalInput.addEventListener('change', (event) => {
+        scene.setDirectionalLight(event?.target?.checked ?? false);
+        broadcastState();
+    });
+
+    var backgroundInput = document.getElementById('light-background');
+    backgroundInput.addEventListener('change', (event) => {
+        scene.setBackground(event?.target?.checked ?? false);
+        broadcastState();
+    });
+
+    var exposureInput = document.getElementById('light-exposure');
+    exposureInput.addEventListener('input', (event) => {
+        scene.setExposure(event?.target?.value ?? 1);
+        broadcastState();
+    });
+
+    presenterAuth.addBecomePresenterCallback(broadcastState);
+    presenterAuth.addStartFollowingCallback(requestPresenterState);
+
+    socket.on('light', (values) => {
+        if (!(presenterAuth?.isFollowingPresenter() ?? true)) {
+            // Not following presenter, so ignore the message.
+            return;
+        }
+        updateLocalState(values);
+    });
+
+    function updateLocalState(values) {
+        directionalInput.checked = values.directional;
+        backgroundInput.checked = values.background;
+        exposureInput.value = values.exposure;
+
+        scene.setDirectionalLight(values.directional);
+        scene.setBackground(values.background);
+        scene.setExposure(values.exposure);
+    }
+
+    function broadcastState() {
+        socket?.emit('light-set', {
+            directional: directionalInput.checked,
+            background: backgroundInput.checked,
+            exposure: exposureInput.value,
+        });
+    }
+
+    function requestPresenterState() {
+        socket.emit('light-get');
+    }
+
+    document.tidyPage = () => {
+        socket?.off('light');
+
+        presenterAuth?.removeBecomePresenterCallback(broadcastState);
+        presenterAuth?.removeStartFollowingCallback(requestPresenterState);
+
+        if (scene?.dispose) scene?.dispose();
+        scene = null;
+    };
+</script>
+</head>
+<body>
+    <style>
+        .outer-wrap {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            width: 100%;
+            height: calc(100vh - (186px + 60px));
+        }
+        #light-scene {
+            flex: 1 1 auto;
+        }
+        .right-side {
+            flex: 0 0 600px;
+            padding-left: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: stretch;
+            flex: 1 0 auto;
+            gap: 10px;
+        }
+        select {
+            font-size: 2rem;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        input[type=checkbox] {
+            width: 30px;
+            height: 30px;
+        }
+        #img-wrap {
+            flex: 1 1 auto;
+            position: relative;
+            width: 100%;
+        }
+        #img-wrap img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+
+    <h1>Lighting</h1>
+    <div class="outer-wrap">
+        <div id="light-scene"></div>
+        <div class="right-side">
+            <div class="controls">
+                <label>Exposure
+                    <input type="range" id="light-exposure" min="0" max="10" value="1" step="0.01">
+                </label>
+
+                <label style="display:flex; flex-direction:row; align-items:center;">
+                    <input type="checkbox" id="light-directional" checked>
+                    Directional Light
+                </label>
+
+                <label style="display:flex; flex-direction:row; align-items:center;">
+                    <input type="checkbox" id="light-background">
+                    Show Background
+                </label>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

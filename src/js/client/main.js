@@ -9,6 +9,7 @@ import buildSceneStaircase from './sceneStaircase.js';
 import buildSceneTexture from './sceneTexture.js';
 import buildSceneRefraction from './sceneRefraction.js';
 import buildSceneTitle from './sceneTitle.js';
+import buildSceneLight from './sceneLight.js';
 
 import buildModelSand from './modelSand.js';
 import buildModelFluvial from './modelFluvial.js';
@@ -56,6 +57,7 @@ window.buildSceneStaircase = buildSceneStaircase;
 window.buildSceneTexture = buildSceneTexture;
 window.buildSceneRefraction = buildSceneRefraction;
 window.buildSceneTitle = buildSceneTitle;
+window.buildSceneLight = buildSceneLight;
 
 window.buildModelSand = buildModelSand;
 window.buildModelFluvial = buildModelFluvial;

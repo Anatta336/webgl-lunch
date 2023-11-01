@@ -39,10 +39,12 @@ export default function buildRenderer(wrapElement, sceneThree, localCamera, opti
     rendererThree.outputColorSpace = THREE.LinearSRGBColorSpace;
     rendererThree.setPixelRatio(currentPixelRatio);
 
-    sceneThree.backgroundIntensity = 0.6;
+    sceneThree.backgroundIntensity = 0.8;
 
     // Prepare post-processing stack.
     let composer = null;
+
+    let toneMapPass = null;
 
     if (options.postPass ?? true) {
         composer = new EffectComposer(rendererThree);
@@ -58,7 +60,7 @@ export default function buildRenderer(wrapElement, sceneThree, localCamera, opti
             0.80, // radius
             1.80  // threshold
         );
-        const toneMapPass = new ShaderPass(ACESFilmicToneMappingShader);
+        toneMapPass = new ShaderPass(ACESFilmicToneMappingShader);
         toneMapPass.uniforms.exposure.value = 2;
 
         const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
@@ -85,11 +87,18 @@ export default function buildRenderer(wrapElement, sceneThree, localCamera, opti
         onBeforeRender,
         onAfterRender,
         render,
+        setToneMapExposure,
         dispose,
     };
 
+    function setToneMapExposure(value) {
+        if (toneMapPass?.uniforms?.exposure) {
+            toneMapPass.uniforms.exposure.value = value;
+        }
+    }
+
     function dispose() {
-        // TODO
+        if (rendererThree?.dispose) rendererThree.dispose();
     }
 
     function render() {

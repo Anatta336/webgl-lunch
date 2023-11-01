@@ -217,11 +217,11 @@ Even more striking is the red of her dress visible on the lower cheek.
 "the members which face each other steep each other in the tone of their surface."
 https://www.discoveringdavinci.com/light-shade-1
 
+### Light
+Directional light is the simple "correct" thing, but looks artificial.
+Image based lighting accounts for the surroundings bouncing light.
 
-
-### Lighting
-- Some discussion of HDR values for colours.
-- Show example of image based lighting vs directional light.
+[Discuss whiter than white, blacker than black]
 
 ### What's hard/slow
 - Realistic people.

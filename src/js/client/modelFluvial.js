@@ -48,8 +48,14 @@ export default function buildModel() {
         setOrmMap,
         setFlatShading,
         setPainted,
+        setMetallicMultiplier,
         dispose,
     };
+
+    function setMetallicMultiplier(multiplier) {
+        material.fluvial.metalness = multiplier;
+        material.fluvial.needsUpdate = true;
+    }
 
     function setBaseColour(enabled) {
         useBaseColour = enabled;
@@ -272,7 +278,7 @@ export default function buildModel() {
         textureSet['fluvial-painted']?.normal?.dispose();
         textureSet['fluvial-painted']?.orm?.dispose();
 
-        meshFluvial.dispose();
-        meshTap.dispose();
+        if (meshFluvial?.dispose) meshFluvial.dispose();
+        if (meshTap?.dispose) meshTap.dispose();
     }
 }
